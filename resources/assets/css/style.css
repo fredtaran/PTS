@@ -1,0 +1,239 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: #fff;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #2F4054;
+}
+.footer p {
+  margin: 20px 0;    
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+.jim-content {
+    background-color: #fff;
+    border-radius: 5px;
+    padding:10px 20px;
+    margin-bottom: 20px;
+}
+.panel-jim {
+    border-color: #59ab91;
+}
+.panel-jim>.panel-heading {
+    background-image: -webkit-linear-gradient(top, #67bfa4 0, #65baa1 100%);
+    background-image: -o-linear-gradient(top,#67bfa4 0, #65baa1 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#67bfa4),to(#65baa1));
+    background-image: linear-gradient(to bottom,#67bfa4 0,#65baa1 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffcf8e3', endColorstr='#fffaf2cc', GradientType=0);
+    background-repeat: repeat-x;
+    color: #fff;
+}
+.modal-header, .modal-footer {
+    padding: 10px;   
+}
+.container .text-muted {
+  margin: 20px 0;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+code {
+  font-size: 80%;
+}
+
+.title-info,.title-desc {    
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #fff;
+}
+.title-info {
+    color: #F39C2B;   
+}
+.name {
+    font-weight: bold;
+    color: #009771;
+}
+.text-italic {
+    font-style: italic;   
+}
+.text-bold {
+    font-weight: bold;
+}
+.page-divider {
+    margin-bottom: 30px;   
+}
+.table-list {
+    border:2px solid #ccc;   
+}
+.table-list thead th {
+    background-color: #ccc;
+    color: #232323;
+    padding: 20px 0;
+}
+.table-form tr td {
+    vertical-align: middle;
+}
+label {
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+}
+/** multi level menu ***/
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+
+input[type="text"] {
+
+}
+
+.btn-flat {
+    border-radius: 0 !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    border-width: 1px !important;
+}
+
+.form-control-static {
+    min-height: 0px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 2px;
+}
+.form-control-select {
+    min-height: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2px;
+}
+.table tr td {
+    vertical-align: middle !important;
+}
+.attainment label {
+    margin-bottom: 0px;
+    font-size:0.9em;
+}
+label {
+    cursor: pointer;
+}
+
+.label {
+    color:#1c2d3f;
+    font-size:0.9em;
+    float:left;
+    margin-top:6px;
+}
+.input {
+    overflow: hidden;
+    display: block;
+    padding: 0 4px 0 10px
+}
+.input input {
+    width: 100%;
+}
+.btn-flat {
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-width: 1px;
+}
+.badge {
+    background-color: #f18b3c !important;
+}
+.title-form {
+    text-align: center;
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.normal-section {
+    background-color: #abff95 !important;
+}
+
+.pregnant-section {
+    background-color: #c3fcff !important;
+}
+
+.read-section {
+    background-color: #eeeeee !important;
+}
+
+.modal { overflow: auto !important; }
+
+.dot {
+    height: 16px;
+    width: 16px;
+    background-color: #41bb29;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+
+}
+
+.box {
+    padding: 10px;
+}
