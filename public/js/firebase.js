@@ -5,13 +5,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebas
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCPr_sD5XFZN6U-iwRv6qO_sCR_fJMNbCI",
-  authDomain: "chdnm-pts-e91cf.firebaseapp.com",
-  databaseURL: "https://chdnm-pts-e91cf-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "chdnm-pts-e91cf",
-  storageBucket: "chdnm-pts-e91cf.firebasestorage.app",
-  messagingSenderId: "813260053052",
-  appId: "1:813260053052:web:3beb28b22de7e372e1c139"
+  apiKey: "AIzaSyDkigItOtYlI7-D_N3jhh-5RMILipztduw",
+  authDomain: "ptrs-d34f8.firebaseapp.com",
+  databaseURL: "https://ptrs-d34f8-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "ptrs-d34f8",
+  storageBucket: "ptrs-d34f8.firebasestorage.app",
+  messagingSenderId: "652005422950",
+  appId: "1:652005422950:web:23cdd71ea44585ebd3baa7",
+  measurementId: "G-F1P8L290ZY"
 };
 
 // Initialize Firebase
