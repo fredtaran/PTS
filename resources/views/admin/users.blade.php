@@ -90,7 +90,7 @@ if($searchKeyword){
                                 </td>
                                 <td>
 
-                                    {{ \App\Models\Facility::find($row->facility_id)->name }}
+                                    {{ \App\Models\Facility::find($row->facility_id)->name ?? '' }}
                                 </td>
                                 <td>
                                     {{ $row->level }}<br />

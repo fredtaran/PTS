@@ -394,8 +394,8 @@
     }
 </script>
 
-<!-- <link href="{{ asset('plugin//bootstrap4-toggle-master/css/bootstrap4-toggle.min.css') }}" rel="stylesheet"> -->
-@vite('resources/plugin//bootstrap4-toggle-master/css/bootstrap4-toggle.min.css')
+<!-- <link href="{{ asset('plugin/bootstrap4-toggle-master/css/bootstrap4-toggle.min.css') }}" rel="stylesheet"> -->
+@vite('resources/plugin/bootstrap4-toggle-master/css/bootstrap4-toggle.min.css')
 <!-- <script src="{{ asset('plugin/bootstrap4-toggle-master/js/bootstrap4-toggle.min.js') }}"></script> -->
 @vite('resources/plugin/bootstrap4-toggle-master/js/bootstrap4-toggle.min.js')
 @endsection

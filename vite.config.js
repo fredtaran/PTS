@@ -42,7 +42,9 @@ export default defineConfig({
                 'resources/plugin/table-fixed-header/table-fixed-header.js',
                 'resources/assets/js/app.js',
                 'resources/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css',
-                'resources/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'
+                'resources/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
+		'resources/plugin/bootstrap4-toggle-master/css/bootstrap4-toggle.min.css',
+		'resources/plugin/bootstrap4-toggle-master/js/bootstrap4-toggle.min.js'
             ],
             refresh: true,
         }),
