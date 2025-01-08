@@ -40,7 +40,9 @@ export default defineConfig({
                 'resources/plugin/daterangepicker_old/daterangepicker.js',
                 'resources/assets/js/jquery.canvasjs.min.js',
                 'resources/plugin/table-fixed-header/table-fixed-header.js',
-                'resources/assets/js/app.js'
+                'resources/assets/js/app.js',
+                'resources/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css',
+                'resources/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'
             ],
             refresh: true,
         }),
