@@ -59,7 +59,6 @@ $dateNow = date('Y-m-d');
                     </div>
                 </div><!-- /.login-box-body -->
                 <div style="text-align: center;">
-                <label style="font-size: 7pt; margin-top: 10px">Created by: DOH Region X Northern Mindanao<br> Powered by: SOCCSKSARGEN PREGNANCY TRACKER SYSTEM</label>
               </div>
           </form>
           
