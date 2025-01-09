@@ -344,4 +344,32 @@ class FacilityCtrl extends Controller
             'title' => 'List of Incident Types'
         ]);
     }
+
+    /**
+     * Incident body
+     */
+    public function IncidentBody(Request $req)
+    {
+      $data = Incident_type::find($req->inci_id);
+        
+        return view('admin.incident_body', [
+            'data' =>  $data
+        ]);
+    }
+
+    /**
+     * Incident Add
+     */
+    public function incidentAdd(Request $req)
+    {
+        $data = $req->all();
+
+        if(isset($req->id)) {
+            Incident_type::find($req->id)->update($data);
+        } else {
+            Incident_type::create($data);
+        }
+
+        return Redirect::back();
+    }
 }

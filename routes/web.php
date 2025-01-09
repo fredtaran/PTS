@@ -136,6 +136,13 @@ Route::middleware(['auth'])->group(function() {
     Route::post('doctor/patient/return/pregnant', [App\Http\Controllers\doctor\PregnantCtrl::class, 'returnPregnant']);
 
     /**
+     * Admin\PregnantCtrl
+     */
+    //34 weeks
+    Route::get('admin/aog/weeks/report', [App\Http\Controllers\admin\PregnantCtrl::class, 'index']);
+    Route::post('admin/aog/weeks/report', [App\Http\Controllers\admin\PregnantCtrl::class, 'index']);
+
+    /**
      * Doctor\ReferralCtrl
      */
     Route::get('doctor/referral', [App\Http\Controllers\doctor\ReferralCtrl::class, 'index']);
@@ -196,6 +203,16 @@ Route::middleware(['auth'])->group(function() {
     Route::post('admin/province/add', [App\Http\Controllers\admin\FacilityCtrl::class, 'provinceAdd']);
     Route::post('admin/province/delete', [App\Http\Controllers\admin\FacilityCtrl::class, 'provinceDelete']);
 
+    // INCIDENT TYPE
+    Route::match(['GET','POST'], 'admin/incident_type', [App\Http\Controllers\admin\FacilityCtrl::class, 'incidentTab']);
+    Route::post('admin/incident_type/body', [App\Http\Controllers\admin\FacilityCtrl::class, 'IncidentBody']);
+    Route::post('admin/incident_type/add', [App\Http\Controllers\admin\FacilityCtrl::class, 'incidentAdd']);
+    Route::post('admin/incident/body','admin\FacilityCtrl@Incident');
+    Route::post('admin/incident/addIncident','admin\FacilityCtrl@addIncident'); 
+    Route::get('doctor/referral/accept/incident/{track_id}','Monitoring\MonitoringCtrl@IncidentLog');
+    Route::get('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
+    Route::post('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
+
     // MUNICIPALITY/CITY
     Route::match(['GET','POST'], 'admin/municipality/{province_id}', [App\Http\Controllers\admin\FacilityCtrl::class, 'municipalityView']);
     Route::post('admin/municipality/crud/add', [App\Http\Controllers\admin\FacilityCtrl::class, 'municipalityAdd']);
@@ -213,13 +230,6 @@ Route::middleware(['auth'])->group(function() {
     Route::post('admin/facility/body', [App\Http\Controllers\admin\FacilityCtrl::class, 'facilityBody']);
     Route::post('admin/facility/add', [App\Http\Controllers\admin\FacilityCtrl::class, 'facilityAdd']);
     Route::post('admin/facility/delete', [App\Http\Controllers\admin\FacilityCtrl::class, 'facilityDelete']);
-
-    //incident type
-    Route::get('admin/incident_type', [App\Http\Controllers\admin\FacilityCtrl::class, 'incidentTab']);
-    Route::post('admin/incident_type/body','admin\FacilityCtrl@IncidentBody');
-    Route::post('admin/incident_type/add','admin\FacilityCtrl@incidentAdd');
-    Route::post('admin/incident/body','admin\FacilityCtrl@Incident');
-    Route::post('admin/incident/addIncident','admin\FacilityCtrl@addIncident');
 
     /**
      * Admin\HomeCtrl
@@ -334,6 +344,14 @@ Route::middleware(['auth'])->group(function() {
     Route::get('support/hospital', [App\Http\Controllers\support\HospitalCtrl::class, 'index']);
     Route::post('support/hospital/update', [App\Http\Controllers\support\HospitalCtrl::class, 'update']);
 
+    /**
+     * Admin\ReportCtrl
+     */
+
+    // Graph
+    Route::get("admin/report/graph/incoming", [App\Http\Controllers\admin\ReportCtrl::class, 'graph']);
+    Route::get("admin/report/graph/bar_chart", [App\Http\Controllers\admin\ReportCtrl::class, 'bar_chart']);
+
     // Online users
     Route::get('admin/report/online', [App\Http\Controllers\admin\ReportCtrl::class, 'online1']);
     Route::post('admin/report/online', [App\Http\Controllers\admin\ReportCtrl::class, 'filterOnline1']);
@@ -344,13 +362,26 @@ Route::middleware(['auth'])->group(function() {
     // Offline facility
     Route::match(['GET','POST'], 'offline/facility', [App\Http\Controllers\admin\ReportCtrl::class, 'offlineFacility']);
     Route::match(['GET','POST'], 'weekly/report', [App\Http\Controllers\admin\ReportCtrl::class, 'weeklyReport']);
-    Route::post('offline/facility/remark','Monitoring\MonitoringCtrl@offlineRemarkBody');
-    Route::post('offline/facility/remark/add','Monitoring\MonitoringCtrl@offlineRemarkAdd');
+    Route::post('offline/facility/remark', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'offlineRemarkBody']);
+    Route::post('offline/facility/remark/add', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'offlineRemarkAdd']);
 
     // Onboard facility
     Route::get('onboard/facility', [App\Http\Controllers\admin\ReportCtrl::class, 'onboardFacility']);
     Route::get('onboard/users', [App\Http\Controllers\admin\ReportCtrl::class, 'onboardUsers']);
     
+    // Rererral
+    Route::get('admin/report/referral', [App\Http\Controllers\admin\ReportCtrl::class, 'referral']);
+    Route::post('admin/report/referral', [App\Http\Controllers\admin\ReportCtrl::class, 'filterReferral']);
+
+    // Statistics
+    Route::match(['GET','POST'],'admin/statistics/incoming', [App\Http\Controllers\admin\ReportCtrl::class, 'statisticsReportIncoming']);
+    Route::match(['GET','POST'],'admin/statistics/outgoing', [App\Http\Controllers\admin\ReportCtrl::class, 'statisticsReportOutgoing']);
+    
+    // ER OB
+    Route::match(['GET','POST'],'admin/er_ob', [App\Http\Controllers\admin\ReportCtrl::class, 'erobReport']);
+
+    // User online
+    Route::match(['GET','POST'],'admin/average/user_online', [App\Http\Controllers\admin\ReportCtrl::class, 'averageUsersOnline']);
 
     /**
      * Doctor\AffiliatedCtrl
@@ -372,8 +403,26 @@ Route::middleware(['auth'])->group(function() {
     Route::get('excel/incoming', [App\Http\Controllers\ExcelCtrl::class, 'ExportExcelIncoming']);
     Route::get('excel/outgoing','ExcelCtrl@ExportExcelOutgoing');
     Route::get('excel/all','ExcelCtrl@ExportExcelAll');
-    Route::match(['GET','POST'],'excel/import','ExcelCtrl@importExcel');
+    Route::match(['GET','POST'],'excel/import', [App\Http\Controllers\ExcelCtrl::class, 'importExcel']);
 
-    
+    /**
+     * admin/DailyCtrl
+     */
+    // Daily users
+    Route::get('admin/daily/users', [App\Http\Controllers\admin\DailyCtrl::class, 'users']);
+    Route::post('admin/daily/users', [App\Http\Controllers\admin\DailyCtrl::class, 'usersFilter']);
+
+    // Daily referral
+    Route::get('admin/daily/referral', [App\Http\Controllers\admin\DailyCtrl::class, 'referral']);
+    Route::get('admin/daily/referral/incoming/', [App\Http\Controllers\admin\DailyCtrl::class, 'incoming']);
+    Route::get('admin/daily/referral/outgoing', [App\Http\Controllers\admin\DailyCtrl::class, 'outgoing']);
+    Route::post('admin/daily/referral', [App\Http\Controllers\admin\DailyCtrl::class, 'referralFilter']);
+
+    /**
+     * admin/ExportCtrl
+     */
+    Route::get('admin/daily/users/export', [App\Http\Controllers\admin\ExportCtrl::class, 'dailyUsers']);
+    Route::get('admin/daily/referral/export', [App\Http\Controllers\admin\ExportCtrl::class, 'dailyReferral']);
+
 });
 

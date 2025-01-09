@@ -1,14 +1,14 @@
 <?php
-    $user = \Illuminate\Support\Facades\Session::get("auth");
-    $fac = \App\Facility::where('id','<>',$user->facility_id)
-        ->where('status',1)
-        ->select('facility.id','facility.name')
-        ->orderBy('name','asc')
+    $user = Auth::user();
+    $fac = \App\Models\Facility::where('id', '<>', $user->facility_id)
+        ->where('status', 1)
+        ->select('facility.id', 'facility.name')
+        ->orderBy('name', 'asc')
         ->get();
-    $dept = \App\Department::leftJoin('users','users.department_id','=','department.id')
+    $dept = \App\Models\Department::leftJoin('users', 'users.department_id', '=', 'department.id')
                 ->select('department.*')
-                ->where('users.department_id','<>','')
-                ->where('users.facility_id',$user->facility_id)
+                ->where('users.department_id', '<>', '')
+                ->where('users.facility_id', $user->facility_id)
                 ->distinct('department.id')
                 ->get();
     $notif_id = 0;

@@ -8,7 +8,9 @@ use App\Models\Incident;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\OfflineFacilityRemark;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 
 class MonitoringCtrl extends Controller
 {
@@ -114,5 +116,32 @@ class MonitoringCtrl extends Controller
             'date_start' => $date_start
 
         ]);
+    }
+
+    /**
+     * Offline Remark Body
+     */
+    public function offlineRemarkBody(Request $request)
+    {
+        return view('admin.report.offline_remark_body', [
+            "facility_id" => $request->facility_id
+        ]);
+    }
+
+    /**
+     * Offline Remark Add
+     */
+    public function offlineRemarkAdd(Request $request){
+        $facility_id = $request->facility_id;
+        $remark_by = Auth::user()->id;
+        $remarks = $request->remarks;
+        $offline_facility_remarks = new OfflineFacilityRemark();
+        $offline_facility_remarks->facility_id = $facility_id;
+        $offline_facility_remarks->remark_by = $remark_by;
+        $offline_facility_remarks->remarks = $remarks;
+        $offline_facility_remarks->save();
+
+        Session::put("add_offline_remark", true);
+        return Redirect::back();
     }
 }

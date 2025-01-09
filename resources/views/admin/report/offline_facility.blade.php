@@ -23,13 +23,13 @@
                 <h3>
                     Call Center IT support<br>
                     <?php
-                    $call_center = \App\User::where('level','admin')->get();
+                    $call_center = \App\Models\User::where('level','admin')->get();
                     ?>
                     @foreach($call_center as $row)
                         <?php
                         $it_name = $row->fname.' '.$row->mname.' '.$row->lname;
                         $date_now = date('Y-m-d');
-                        $call_count = \App\OfflineFacilityRemark::where("remark_by",$row->id)->count();
+                        $call_count = \App\Models\OfflineFacilityRemark::where("remark_by",$row->id)->count();
                         ?>
                         <span class="badge bg-blue"> {{ $call_count }}</span> <span style="font-size: 8pt;">{{ $it_name }}</span>
                     @endforeach
@@ -106,7 +106,7 @@
                                     @if(count($offline_facility_remark) > 0)
                                         @foreach($offline_facility_remark as $offline_remark)
                                             <?php
-                                            $remark_by = \App\User::find($offline_remark->remark_by);
+                                            $remark_by = \App\Models\User::find($offline_remark->remark_by);
                                             $remark_by = $remark_by->fname.' '.$remark_by->mname.' '.$remark_by->lname;
                                             ?>
                                             <h3 >{{ $remark_by }}</h3>
@@ -116,7 +116,7 @@
                                                 <small class="text-yellow"><i>({{ date("F j, Y, g:i a",strtotime($offline_remark->created_at)) }})</i></small>
                                             </div>
                                         @endforeach
-                                        @if(Session::get('auth')->level == 'admin')
+                                        @if(Auth::user()->level == 'admin')
                                             <button class="btn btn-xs btn-info" href="#add_offline_remark" data-toggle="modal" onclick="addRemark(
                                             '{{ $row->facility_id }}'
                                             )"><i class="fa fa-sticky-note"></i> Add more remark</button>

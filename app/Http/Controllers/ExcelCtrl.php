@@ -65,4 +65,40 @@ class ExcelCtrl extends Controller
 
         /*return Excel::download(new QueryExport, 'export.xlsx');*/
     }
+
+    public function importExcel(Request $request) {
+        if($request->isMethod('post')) {
+            $import = new ExcelImport();
+            Excel::import($import, request()->file('import_file'));
+            foreach($import->data as $row) {
+                if(
+                    !(
+                        $row[0] == "code" &&
+                        $row[1] == "description" &&
+                        $row[2] == "group" &&
+                        $row[3] == "case_rate" &&
+                        $row[4] == "professional_fee" &&
+                        $row[5] == "health_care_fee" &&
+                        $row[6] == "source"
+                    )
+                ) {
+                    if(!Icd10::where("code", $row[0])->first()) {
+                        Icd10::create([
+                            "code" => $row[0],
+                            "description" => $row[1],
+                            "group" => $row[2],
+                            "case_rate" => $row[3],
+                            "professional_fee" => $row[4],
+                            "health_care_fee" => $row[5],
+                            "source" => $row[6]
+                        ]);
+                    }
+                }
+            }
+
+            return back()->with('success', 'Successfully import!');
+        }
+
+        return view('admin.excel.import_excel');
+    }
 }

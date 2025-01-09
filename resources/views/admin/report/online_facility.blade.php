@@ -1,35 +1,35 @@
 <?php
-    // function convertToHoursMins($time, $format = '%02d:%02d') {
-    //     if ($time < 1) {
-    //         return;
-    //     }
-    //     $hours = floor($time / 60);
-    //     $minutes = ($time % 60);
-    //     return sprintf($format, $hours, $minutes);
-    // }
+    function convertToHoursMins($time, $format = '%02d:%02d') {
+        if ($time < 1) {
+            return;
+        }
+        $hours = floor($time / 60);
+        $minutes = ($time % 60);
+        return sprintf($format, $hours, $minutes);
+    }
 
-    // function calculateFromDay($date_start,$minutes){
-    //     $to_time =  explode(' ',$date_start)[0].date(' H:i:s',strtotime($minutes));
-    //     $to_time = strtotime($to_time);
-    //     $from_time = strtotime(explode(' ',$date_start)[0].' 23:59:59');
-    //     $minutes = round(abs($to_time - $from_time) / 60,2);
+    function calculateFromDay($date_start,$minutes){
+        $to_time =  explode(' ', $date_start)[0].date(' H:i:s', strtotime($minutes));
+        $to_time = strtotime($to_time);
+        $from_time = strtotime(explode(' ', $date_start)[0] . ' 23:59:59');
+        $minutes = round(abs($to_time - $from_time) / 60, 2);
 
-    //     return $minutes;
-    // }
+        return $minutes;
+    }
 
-    // function offlineTime($date_start,$date_end)
-    // {
-    //     if($date_end == '0000-00-00 00:00:00')
-    //         $date_end = explode(' ',$date_start)[0].' 23:59:59';
+    function offlineTime($date_start,$date_end)
+    {
+        if($date_end == '0000-00-00 00:00:00')
+            $date_end = explode(' ',$date_start)[0].' 23:59:59';
 
-    //     $to_time = strtotime($date_start);
-    //     $from_time = strtotime($date_end);
-    //     $minutes = round(abs($to_time - $from_time) / 60,2);
-    //     $minutes = date('H:i', mktime(0,$minutes));
+        $to_time = strtotime($date_start);
+        $from_time = strtotime($date_end);
+        $minutes = round(abs($to_time - $from_time) / 60,2);
+        $minutes = date('H:i', mktime(0,$minutes));
 
 
-    //     return convertToHoursMins(calculateFromDay($date_start,$minutes), '%02d hours and %02d minutes');
-    // }
+        return convertToHoursMins(calculateFromDay($date_start, $minutes), '%02d hours and %02d minutes');
+    }
 ?>
 
 @extends('layouts.app')

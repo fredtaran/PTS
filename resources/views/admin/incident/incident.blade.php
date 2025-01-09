@@ -55,7 +55,7 @@
                         @endforeach
                     </table>
                     <div class="text-center">
-                        {{ $data->links() }}
+                         <!-- $data->links()  -->
                     </div>
                 </div>
             @else
@@ -91,8 +91,9 @@
             })
         }
 
-        function IncidentDelete(facility_id){
+        function IncidentDelete(facility_id) {
             $(".inci_id").val(facility_id);
+            console.log(facility_id);
         }
 
         @if(Session::get('incident'))
