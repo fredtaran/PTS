@@ -13,13 +13,12 @@
                    @foreach($data as $row)                      
                         <tr>
                             <td>
-                            <a target="_blank" href="{{ url('doctor/fileView/'.$row->id) }}"
-                                       data-toggle="modal"
-                                       class="btn btn-info btn-xs">
-                                       <i class="fa fa-file"></i>
-                                       {{$row->name}}
-                                    </a>
-
+                                <a target="_blank" href="{{ url('doctor/fileView/' . $row->id) }}"
+                                    data-toggle="modal"
+                                    class="btn btn-info btn-xs">
+                                    <i class="fa fa-file"></i>
+                                    {{$row->name}}
+                                </a>
                             </td>
                             <td>
                                 {{$row->file_type}}

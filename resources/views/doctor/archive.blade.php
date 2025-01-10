@@ -74,17 +74,17 @@ $user = Auth::user();
                                         </td>
                                         <?php
                                         $status = '';
-                                        $current = \App\Activity::where('code',$row->code)
-                                            ->orderBy('id','desc')
+                                        $current = \App\Models\Activity::where('code', $row->code)
+                                            ->orderBy('id', 'desc')
                                             ->first();
                                         if($current)
                                         {
                                             $status = strtoupper($current->status);
                                         }
                                         ?>
-                                        <td>{{ \App\Http\Controllers\doctor\PatientCtrl::getDischargeDate($current->status,$row->code) }}</td>
+                                        <td>{{ $current ? \App\Http\Controllers\doctor\PatientCtrl::getDischargeDate($current->status, $row->code) : '-' }}</td>
                                         <td>
-                                            {!! nl2br(\App\Http\Controllers\doctor\PatientCtrl::getCancellationReason($current->status,$row->code)) !!}
+                                            {!! $current ? nl2br(\App\Http\Controllers\doctor\PatientCtrl::getCancellationReason($current->status, $row->code)) : '-' !!}
                                         </td>
                                     </tr>
                                 @endforeach

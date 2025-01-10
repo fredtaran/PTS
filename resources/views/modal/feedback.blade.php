@@ -8,7 +8,7 @@
                     </h3>
 
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" onclick="reloadMessage()">
+                        <button type="button" class="btn btn-box-tool reloadMessage">
                             <i class="fa fa-refresh"></i></button>
                         <button type="button" data-dismiss="modal" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>

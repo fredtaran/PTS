@@ -7,6 +7,7 @@ use App\Models\Seen;
 use App\Models\User;
 use App\Models\Activity;
 use App\Models\Facility;
+use App\Models\Feedback;
 use App\Models\Tracking;
 use App\Models\LabResult;
 use App\Models\Antepartum;
@@ -908,5 +909,56 @@ class ReferralCtrl extends Controller
         ->get();
 
         return $data;
+    }
+
+    /**
+     * Feedback
+     */
+    public function feedback($code)
+    {
+        $data = Feedback::select(
+                    'feedback.id as id',
+                    'feedback.sender as sender',
+                    'feedback.message',
+                    'users.fname as fname',
+                    'users.lname as lname',
+                    'facility.name as facility',
+                    'facility.abbr as abbr',
+                    'feedback.created_at as date'
+                )
+                ->leftJoin('users', 'users.id', '=', 'feedback.sender')
+                ->leftJoin('facility', 'facility.id', '=', 'users.facility_id')
+                ->where('code', $code)
+                ->orderBy("id", "asc")
+                ->get();
+
+        return view('doctor.feedback', [
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * Save feedback
+     */
+    public function saveFeedback(Request $req)
+    {
+        $user = Auth::user();
+
+        $data = array(
+            'code'=> $req->code,
+            'sender'=> $user->id,
+            'receiver'=> 0,
+            'message'=> $req->message,
+        );
+
+        $f = Feedback::create($data);
+
+        $doc = User::find($user->id);
+        $name = ucwords(mb_strtolower($doc->fname)) . " " . ucwords(mb_strtolower($doc->lname));
+
+        return view('doctor.feedback_append', [
+            "name" => $name,
+            "message" => $req->message
+        ]);
     }
 }

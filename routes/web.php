@@ -114,7 +114,6 @@ Route::middleware(['auth'])->group(function() {
     Route::post('admin/users/store', [App\Http\Controllers\admin\UserCtrl::class, 'store']);
     Route::get('admin/login', [App\Http\Controllers\admin\UserCtrl::class, 'loginAs']);
     Route::post('admin/login', [App\Http\Controllers\admin\UserCtrl::class, 'assignLogin']);
-    
 
     /**
      * ParamCtrl
@@ -308,6 +307,11 @@ Route::middleware(['auth'])->group(function() {
     Route::get('doctor/recotored', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'recotoRed']);
     Route::post('doctor/recotored', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'recotoRed']);
 
+    //issue and concern
+    Route::post('issue/concern/submit', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'issueSubmit']);
+    Route::match(['GET','POST'], 'issue/concern', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'getIssue']);
+    Route::get('issue/concern/{tracking_id}/{referred_from}', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'IssueAndConcern']);
+
     /**
      * ChatCtrl
      */
@@ -423,6 +427,20 @@ Route::middleware(['auth'])->group(function() {
      */
     Route::get('admin/daily/users/export', [App\Http\Controllers\admin\ExportCtrl::class, 'dailyUsers']);
     Route::get('admin/daily/referral/export', [App\Http\Controllers\admin\ExportCtrl::class, 'dailyReferral']);
+
+    /**
+     * doctor/ReferralCtrl
+     */
+    Route::get('doctor/feedback/{code}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'feedback']);
+    Route::get('doctor/feedback/reply/{id}','doctor\ReferralCtrl@replyFeedback');
+    Route::get('doctor/feedback/load/{code}','doctor\ReferralCtrl@loadFeedback');
+    Route::get('doctor/feedback/notification/{code}/{user_id}','doctor\ReferralCtrl@notificationFeedback');
+    Route::post('doctor/feedback', [App\Http\Controllers\doctor\ReferralCtrl::class, 'saveFeedback']);
+
+    /**
+     * Change duty schedule
+     */
+    Route::get('duty/{option}', [App\Http\Controllers\UserCtrl::class, 'duty']);
 
 });
 

@@ -9,7 +9,6 @@
 
         // var acceptRef = dbRef.ref('Accept');
         // var rejectRef = dbRef.ref('Reject');
-        // var callRef = dbRef.ref('Call');
         // var arriveRef = dbRef.ref('Arrival');
         // var admitRef = dbRef.ref('Admit');
         // var dischargeRef = dbRef.ref('Discharge');

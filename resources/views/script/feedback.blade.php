@@ -30,14 +30,14 @@
             }, 500);
         }
 
-        function reloadMessage() {
+        $('.reloadMessage').on('click', function () {
             $("#message").val('').focus();
-            $("#"+code).html("Loading...");
-            $("#"+code).load("{{ url('doctor/feedback/') }}/" + code);
+            $("#" + code).html("Loading...");
+            $("#" + code).load("{{ url('doctor/feedback/') }}/" + code);
             $("#current_code").val(code);
 
             scrolldownFeedback(code);
-        }
+        });
 
         $('.btn-doh').on('click', function () {
             code = $(this).data('code');

@@ -76,7 +76,7 @@
                 <!-- Post -->
                 <div class="post comment_body">
                     <div class="user-block">
-                        <img class="img-circle img-bordered-sm" src="{{ asset('img/doh.png') }}" alt="user image">
+                        <img class="img-circle img-bordered-sm" src="{{ asset('img/DOHCHDNM.png') }}" alt="user image">
                         <span class="username">
                           <a href="#">Jonathan Burke Jr.</a>
                         </span>
@@ -94,7 +94,7 @@
                         <li>
                             <div class="box box-info">
                                 <div class="user-block">
-                                    <img class="img-circle img-bordered-sm" src="{{ asset('img/doh.png') }}" style="border: 3px solid red" alt="user image">
+                                    <img class="img-circle img-bordered-sm" src="{{ asset('img/DOHCHDNM.png') }}" style="border: 3px solid red" alt="user image">
                                     <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
                                     <span class="description">Shared publicly - 7:30 PM today</span>
                                 </div>
@@ -106,7 +106,7 @@
                         <li>
                             <div class="box box-info">
                                 <div class="user-block">
-                                    <img class="img-circle img-bordered-sm" src="{{ asset('img/doh.png') }}" style="border: 3px solid red" alt="user image">
+                                    <img class="img-circle img-bordered-sm" src="{{ asset('img/DOHCHDNM.png') }}" style="border: 3px solid red" alt="user image">
                                     <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
                                     <span class="description">Shared publicly - 7:30 PM today</span>
                                 </div>

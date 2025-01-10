@@ -1,6 +1,6 @@
 <!-- Message. Default to the left -->
 <?php
-    $user = \Illuminate\Support\Facades\Session::get('auth');
+    $user = Auth::user();
     $session = 0;
 ?>
 <div class="reco-body">
@@ -9,11 +9,11 @@
             <?php
                 $pull = 'right';
                 $position = 'left';
-                if($session==0){
-                    \Illuminate\Support\Facades\Session::put('last_scroll_id',$row->id);
+                if($session == 0){
+                    \Illuminate\Support\Facades\Session::put('last_scroll_id', $row->id);
                     $session = 1;
                 }
-                if($user->id==$row->sender){
+                if($user->id == $row->sender){
                     $pull = 'left';
                     $position = 'right';
                 }
@@ -26,7 +26,7 @@
                 <!-- /.direct-chat-info -->
                 <?php
                     $icon = 'receiver.png';
-                    if($user->id==$row->sender)
+                    if($user->id == $row->sender)
                         $icon = 'sender.png';
                 ?>
                 <img class="direct-chat-img" title="{{ $row->facility }}" src="{{ url('img/'.$icon) }}" alt="Message User Image"><!-- /.direct-chat-img -->

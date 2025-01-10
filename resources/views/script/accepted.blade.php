@@ -1,4 +1,7 @@
-<script>
+<script type="module">
+import { app } from '{{ asset("js/firebase.js") }}'
+import { getDatabase, ref, onValue, onChildAdded } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
+
     $(document).ready(function() {
         var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
             removeItemButton: true,
@@ -13,10 +16,11 @@
 
         <?php $user = Auth::user(); ?>
 
-        var arriveRef = dbRef.ref('Arrival');
-        var admitRef = dbRef.ref('Admit');
-        var dischargetRef = dbRef.ref('Discharge');
-        var transferRef = dbRef.ref('Transfer');
+        var db = getDatabase();
+        const arriveRef = ref(db, 'Arrival');
+        const admitRef = ref(db, 'Admit');
+        const dischargetRef = ref(db, 'Discharge');
+        var transferRef = ref(db, 'Transfer');
         var referred_name = '';
         //initializes variables
         var current_facility, code, patient_name, track_id, form_type, unique_id;

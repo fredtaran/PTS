@@ -1,36 +1,38 @@
-<script>
+<script type="module">
+    import { app } from '{{ asset("js/firebase.js") }}'
+    import { getDatabase, ref, onValue, onChildAdded } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
+
     $(document).ready(function() {
         <?php $user = Auth::user(); ?>
+        const db = getDatabase();
+        const seenRef = ref(db, 'Seen');
+        const acceptRef = ref(db, 'Accept');
+        const rejectRef = ref(db, 'Reject');
+        const callRef = ref(db, 'Call');
+        const arriveRef = ref(db, 'Arrive');
+        const admitRef = ref(db, 'Admit');
+        const dischargeRef = ref(db, 'Discharge');
+        const referredRef = ref(db, 'Referred');
         var myfacility_name = {{ $user->facility_id }} == 0 ? 'DOH CHD-NM' : {{ \App\Models\Facility::find(0)?->name->first()->name }} + "";
-        var referralRef = dbRef.ref('Referral');
-        var seenRef = dbRef.ref('Seen');
-        var acceptRef = dbRef.ref('Accept');
-        var rejectRef = dbRef.ref('Reject');
-        var callRef = dbRef.ref('Call');
-        var arriveRef = dbRef.ref('Arrival');
-        var admitRef = dbRef.ref('Admit');
-        var dischargeRef = dbRef.ref('Discharge');
-        var transferRef = dbRef.ref('Transfer');
 
-        seenRef.on('child_added', function(snapshot) {
-            var data = snapshot.val();
-            var item = '.code-' + data.code;
-            var activity = '#activity-' + data.activity_id;
-            var date = data.date;
-            item = $(item).find('#item-' + data.item);
+        onChildAdded(seenRef, (snapshot) => {
+                var data = snapshot.val();
+                var item = '.code-' + data.code;
+                var activity = '#activity-' + data.activity_id;
+                var date = data.date;
+                item = $(item).find('#item-' + data.item);
 
-            $(item).removeClass('pregnant-section normal-section').addClass('read-section');
-            $(item).find('.icon').removeClass('fa-ambulance').addClass('fa-eye');
-            $(item).find('.date_activity').html(date);
-            $(activity).removeClass('pregnant-section normal-section').addClass('read-section');
-            $(activity).find('.icon').removeClass('fa-ambulance').addClass('fa-eye');
-            $(activity).find('.date_activity').html(date);
+                $(item).removeClass('pregnant-section normal-section').addClass('read-section');
+                $(item).find('.icon').removeClass('fa-ambulance').addClass('fa-eye');
+                $(item).find('.date_activity').html(date);
+                $(activity).removeClass('pregnant-section normal-section').addClass('read-section');
+                $(activity).find('.icon').removeClass('fa-ambulance').addClass('fa-eye');
+                $(activity).find('.date_activity').html(date);
         });
 
         var acceptContent = '';
         var rejectContent = '';
-
-        acceptRef.on('child_added', function(snapshot) {
+        onChildAdded(acceptRef, (snapshot) => {
             var data = snapshot.val();
             var date = data.date;
             var action_md = data.action_md;
@@ -52,7 +54,7 @@
             $('.code-' + data.code + ' > li:nth-child(1)').after(acceptContent);
         });
 
-        rejectRef.on('child_added', function(snapshot) {
+        onChildAdded(rejectRef, (snapshot) => {
             var data = snapshot.val();
             var date = data.date;
             var patient_name = data.patient_name;
@@ -82,7 +84,7 @@
         });
 
         var callContent = '';
-        callRef.on('child_added', function(snapshot) {
+        onChildAdded(callRef, (snapshot) => {
             var data = snapshot.val();
 
             var date = data.date;
@@ -113,7 +115,7 @@
         });
 
         var arriveContent = '';
-        arriveRef.on('child_added', function(snapshot) {
+        onChildAdded(callRef, (snapshot) => {
             var data = snapshot.val();
             var date = data.date;
             var patient_name = data.patient_name;
@@ -135,7 +137,7 @@
         });
 
         var admitContent = '';
-        admitRef.on('child_added', function(snapshot) {
+        onChildAdded(callRef, (snapshot) => {
             var data = snapshot.val();
             var date = data.date;
             var patient_name = data.patient_name;
@@ -155,7 +157,7 @@
         });
 
         var dischargeContent = '';
-        dischargeRef.on('child_added', function(snapshot) {
+        onChildAdded(callRef, (snapshot) => {
             var data = snapshot.val();
             var date = data.date;
             var patient_name = data.patient_name;
@@ -173,11 +175,11 @@
                 '\n' +
                 '</div></li>';
             $('.code-' + data.code + ' > li:nth-child(1)').after(dischargeContent);
-        //    $('.code-'+data.code).append(dischargeContent);
+            // $('.code-'+data.code).append(dischargeContent);
         });
 
         var transferContent = '';
-        transferRef.on('child_added', function(snapshot) {
+        onChildAdded(callRef, (snapshot) => {
             var data = snapshot.val();
             var date = data.date;
             var patient_name = data.patient_name;
@@ -200,8 +202,6 @@
             $('.code-' + data.code + ' > li:nth-child(1)').after(transferContent);
             // $('.code-'+data.code).append(transferContent);
         });
-
-
     })
 </script>
 
@@ -235,8 +235,14 @@
 </script>
 
 {{--script for refer to other facility--}}
-<script>
+<script type="module">
+import { app } from '{{ asset("js/firebase.js") }}'
+import { getDatabase, ref, set, onValue, onChildAdded, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
+
     $(document).ready(function() {
+        const db = getDatabase();
+        const transferRef = ref(db, 'Transfer');
+
         $('.select_facility').on('change', function() {
             var id = $(this).val();
             var url = "{{ url('location/facility/') }}";
@@ -298,7 +304,7 @@
                             transferRef.child(d.key).remove();
                         });
 
-                        var connRef = dbRef.ref('Referral');
+                        var connRef = ref(db, 'Referral');
                         var refer_data = {
                             referring_name: myfacility_name,
                             patient_code: data.code,

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Monitoring;
 
 use DB;
 use Carbon\Carbon;
+use App\Models\Issue;
+use App\Models\Facility;
 use App\Models\Incident;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -143,5 +145,62 @@ class MonitoringCtrl extends Controller
 
         Session::put("add_offline_remark", true);
         return Redirect::back();
+    }
+
+    /**
+     * Issues and concern
+     */
+    public function IssueAndConcern($tracking_id, $referred_from)
+    {
+        $facility = Facility::find($referred_from);
+        $data = Issue::where("tracking_id", "=", $tracking_id)->orderBy("id", "asc")->get();
+        return view('issue.issue', [
+            'data' => $data,
+            'facility' => $facility
+        ]);
+    }
+
+    /**
+     * Submit issue and concern
+     */
+    public function issueSubmit(Request $request)
+    {
+        $issue = $request->get('issue');
+        $tracking_id = $request->get('tracking_id');
+        $data  = array(
+            "tracking_id" => $tracking_id,
+            "issue" => $issue,
+            "status" => 'outgoing'
+        );
+        Issue::create($data);
+
+        $facility = Facility::find(Auth::user()->facility_id);
+        return view("issue.issue_append", [
+            "facility_name" => $facility->name,
+            "facility_picture" => $facility->picture,
+            "tracking_id" => $tracking_id,
+            "issue" => $issue
+        ]);
+    }
+
+    /**
+     * Get issue
+     */
+    public function getIssue(Request $request)
+    {
+        if(isset($request->date_range)) {
+            $date_start = date('Y-m-d', strtotime(explode(' - ', $request->date_range)[0])) . ' 00:00:00';
+            $date_end = date('Y-m-d', strtotime(explode(' - ', $request->date_range)[1])) . ' 23:59:59';
+        } else {
+            $date_start = Carbon::now()->startOfYear()->format('Y-m-d') . ' 00:00:00';
+            $date_end = date('Y-m-d') . ' 23:59:59';
+        }
+
+        $issue = DB::connection('mysql')->select("call issue('$date_start', '$date_end')");
+        return view('doctor.issue', [
+            "issue" => $issue,
+            "date_start" => $date_start,
+            "date_end" => $date_end
+        ]);
     }
 }

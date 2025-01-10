@@ -144,7 +144,7 @@
                                     @if($row->picture)
                                         <img class="profile-user-img img-responsive img-circle" src="{{ asset('hospital_logo').'/'.$row->picture }}" alt="User profile picture">
                                     @else
-                                        <img class="profile-user-img img-responsive img-circle" src="{{ asset('img/doh.png') }}" alt="User profile picture">
+                                        <img class="profile-user-img img-responsive img-circle" src="{{ asset('img/DOHCHDNM.png') }}" alt="User profile picture">
                                     @endif
 
                                     <h3 class="profile-username text-center">{{ $row->name }}</h3>
@@ -365,7 +365,7 @@
                                     @if($row->picture)
                                         <img class="profile-user-img img-responsive img-circle" src="{{ asset('hospital_logo').'/'.$row->picture }}" alt="User profile picture">
                                     @else
-                                        <img class="profile-user-img img-responsive img-circle" src="{{ asset('img/doh.png') }}" alt="User profile picture">
+                                        <img class="profile-user-img img-responsive img-circle" src="{{ asset('img/DOHCHDNM.png') }}" alt="User profile picture">
                                     @endif
 
                                     <h3 class="profile-username text-center">{{ $row->name }}</h3>

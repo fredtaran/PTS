@@ -128,7 +128,7 @@ class LoginCtrl extends Controller
      */
     public function resetPassword(Request $req)
     {
-        $user = Auth::session();
+        $user = Auth::user();
 
         if (Hash::check($req->current, $user->password))
         {

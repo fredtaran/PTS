@@ -1094,4 +1094,33 @@ class PatientCtrl extends Controller
 
         return $tracking_id;
     }
+
+    /**
+     * Get discharge date
+     */
+    static function getDischargeDate($status, $code)
+    {
+        $date = Activity::where('code', $code)
+                    ->where('status', $status)
+                    ->first();
+        if($date)
+            $date = $date->date_referred;
+        else
+            return false;
+
+        return date('F d, Y h:i A', strtotime($date));
+    }
+
+    /**
+     * Get cancellation reason
+     */
+    static function getCancellationReason($status, $code)
+    {
+        $act = Activity::where('code', $code)
+                    ->where('status', $status)
+                    ->first();
+        if($act)
+            return $act->remarks;
+        return 'No Reason';
+    }
 }

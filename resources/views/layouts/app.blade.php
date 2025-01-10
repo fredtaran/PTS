@@ -1404,7 +1404,7 @@
 @include('script.firebase')
 @include('script.newreferral')
 @include('script.password')
-<!-- @include('script.duty') -->
+@include('script.duty')
 @include('script.desktop-notification')
 @include('script.notification')
 

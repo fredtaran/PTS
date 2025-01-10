@@ -919,6 +919,7 @@ $('body').on('click', '.btn_call_request', function() {
 
 {{--SEEN BY--}}
 <script>
+    // Incoming patient seen button
     $('body').on('click', '.btn-seen',function() {
         var de = '<hr />\n' +
             '                    LOADING...\n' +

@@ -64,8 +64,7 @@
             @foreach($data as $row)                      
             <tr>
                 <td>
-                    <a target="_blank" href="{{ url('doctor/fileView/'.$row->id) }}"
-                    data-toggle="modal"
+                    <a target="_blank" href="{{ url('doctor/fileView/' . $row->id) }}"
                     class="btn btn-info btn-xs">
                         <i class="fa fa-file"></i>
                         {{ $row->name }}
