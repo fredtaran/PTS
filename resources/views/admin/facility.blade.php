@@ -152,11 +152,12 @@
                 title: "",
                 msg: "<?php echo Session::get("facility_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
         <?php
-            Session::put("facility",false);
-            Session::put("facility_message",false)
+            Session::put("facility", false);
+            Session::put("facility_message", false)
         ?>
         @endif
     </script>
