@@ -148,7 +148,6 @@ $user = Auth::user();
                                 </h3>
                             </div>
                             @else
-                            D
                             <i class="fa fa-user-plus bg-olive"></i>
                             <div class="timeline-item">
                                 <span class="time"><i class="fa fa-calendar"></i> {{ $date }}</span>

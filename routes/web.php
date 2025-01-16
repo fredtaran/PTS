@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\FacilityCtrl;
 
 /*
 |--------------------------------------------------------------------------
@@ -197,7 +198,7 @@ Route::middleware(['auth'])->group(function() {
      * Admin\FacilityCtrl
      */
     // PROVINCE
-    Route::match(['GET','POST'], 'admin/province', [App\Http\Controllers\admin\FacilityCtrl::class, 'provinceView']);
+    Route::match(['GET','POST'], 'admin/province', [FacilityCtrl::class, 'provinceView']);
     Route::post('admin/province/body', [App\Http\Controllers\admin\FacilityCtrl::class, 'provinceBody']);
     Route::post('admin/province/add', [App\Http\Controllers\admin\FacilityCtrl::class, 'provinceAdd']);
     Route::post('admin/province/delete', [App\Http\Controllers\admin\FacilityCtrl::class, 'provinceDelete']);
@@ -206,9 +207,8 @@ Route::middleware(['auth'])->group(function() {
     Route::match(['GET','POST'], 'admin/incident_type', [App\Http\Controllers\admin\FacilityCtrl::class, 'incidentTab']);
     Route::post('admin/incident_type/body', [App\Http\Controllers\admin\FacilityCtrl::class, 'IncidentBody']);
     Route::post('admin/incident_type/add', [App\Http\Controllers\admin\FacilityCtrl::class, 'incidentAdd']);
-    Route::post('admin/incident/body','admin\FacilityCtrl@Incident');
+    Route::post('admin/incident/body', [App\Http\Controllers\admin\FacilityCtrl::class, 'Incident']);
     Route::post('admin/incident/addIncident','admin\FacilityCtrl@addIncident'); 
-    Route::get('doctor/referral/accept/incident/{track_id}','Monitoring\MonitoringCtrl@IncidentLog');
     Route::get('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
     Route::post('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
 
@@ -299,7 +299,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('monitoring/remark','Monitoring\MonitoringCtrl@bodyRemark');
     Route::post('monitoring/add/remark','Monitoring\MonitoringCtrl@addRemark');
     Route::get('monitoring/feedback/{code}','Monitoring\MonitoringCtrl@feedbackDOH');
-    Route::get('doctor/referral/accept/incident/{track_id}','Monitoring\MonitoringCtrl@IncidentLog');
+    Route::get('doctor/referral/accept/incident/{track_id}', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'IncidentLog']);
     Route::get('doctor/report/incidentIndex', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'incidentIndex']);
     Route::post('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
 
@@ -436,6 +436,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('doctor/feedback/load/{code}','doctor\ReferralCtrl@loadFeedback');
     Route::get('doctor/feedback/notification/{code}/{user_id}','doctor\ReferralCtrl@notificationFeedback');
     Route::post('doctor/feedback', [App\Http\Controllers\doctor\ReferralCtrl::class, 'saveFeedback']);
+    Route::post('doctor/referral/accept/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'accept']); //if form is accepted
+    Route::post('doctor/referral/arrive/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'arrive']); //if patient is arrived
+    Route::post('doctor/referral/admit/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'admit']); //if patient is admitted
+    Route::post('doctor/referral/archive/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'archive']); //if patient is archived
 
     /**
      * Change duty schedule

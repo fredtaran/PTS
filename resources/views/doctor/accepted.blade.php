@@ -43,50 +43,50 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead class="bg-gray">
-                                <tr>
-                                    <th>Referring Facility</th>
-                                    <th>Patient Name/Code</th>
-                                    <th>Date Accepted</th>
-                                    <th>Current Status</th>
-                                    <th>Action</th>
-                                </tr>
+                                    <tr>
+                                        <th>Referring Facility</th>
+                                        <th>Patient Name/Code</th>
+                                        <th>Date Accepted</th>
+                                        <th>Current Status</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
+
                                 <tbody>
                                 @foreach($data as $row)
                                     <?php
-                                    $modal = ($row->type=='normal') ? '#normalFormModal' : '#RefferedpregnantFormModalTrack';
-                                    $dismodal = ($row->type=='normal') ? '#dischargeModal' : '#pregnantDisModal';
-                                    $type = ($row->type=='normal') ? 'Non-Pregnant' : 'Pregnant';
-                                    //$step = \App\Http\Controllers\doctor\ReferralCtrl::step($row->code);
+                                    $modal = ($row->type == 'normal') ? '#normalFormModal' : '#RefferedpregnantFormModalTrack';
+                                    $dismodal = ($row->type == 'normal') ? '#dischargeModal' : '#pregnantDisModal';
+                                    $type = ($row->type == 'normal') ? 'Non-Pregnant' : 'Pregnant';
                                     $step = \App\Http\Controllers\doctor\ReferralCtrl::step_v2($row->status);
-                                    $feedback = \App\Feedback::where('code',$row->code)->count();
+                                    $feedback = \App\Models\Feedback::where('code', $row->code)->count();
 
                                     $status = '';
-                                    $current = \App\Activity::where('code',$row->code)
-                                        ->orderBy('id','desc')
+                                    $current = \App\Models\Activity::where('code', $row->code)
+                                        ->orderBy('id', 'desc')
                                         ->first();
-                                    if($current)
-                                    {
+                                    if($current) {
                                         $status = strtoupper($current->status);
                                     }
 
                                     $start = \Carbon\Carbon::parse($row->date_accepted);
                                     $end = \Carbon\Carbon::now();
                                     $diff = $end->diffInHours($start);
-                                    $user = Session::get('auth');
+                                    $user = Auth::user();
                                     ?>
                                     <tr>
                                         <td style="white-space: nowrap;">
-                                    <span class="facility" title="{{ $row->name }}">
-                                    @if(strlen($row->name)>25)
-                                            {{ substr($row->name,0,25) }}...
-                                        @else
-                                            {{ $row->name }}
-                                        @endif
-                                    </span>
+                                            <span class="facility" title="{{ $row->name }}">
+                                                @if(strlen($row->name)>25)
+                                                    {{ substr($row->name, 0, 25) }}...
+                                                @else
+                                                    {{ $row->name }}
+                                                @endif
+                                            </span>
                                             <br />
                                             <span class="text-muted">{{ $type }}</span>
                                         </td>
+
                                         <td>
                                             <a href="{{ $modal }}" class="view_form"
                                                data-toggle="modal"
@@ -98,10 +98,11 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                                                 <small class="text-warning">{{ $row->code }}</small>
                                             </a>
                                         </td>
+
                                         <td>{{ $row->date_accepted }}</td>
                                         <td class="activity_{{ $row->code }}">{{ $status }}</td>
                                         <td style="white-space: nowrap;">
-                                            @if( ($status=='ACCEPTED' || $status == 'TRAVEL') && $diff < 4)
+                                            @if( ($status == 'ACCEPTED' || $status == 'TRAVEL') && $diff < 4)
                                                 <button class="btn btn-sm btn-primary btn-action"
                                                         title="Patient Arrived"
                                                         data-toggle="modal"
@@ -112,6 +113,7 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                                                         data-code="{{ $row->code}}">
                                                     <i class="fa fa-wheelchair"></i>
                                                 </button>
+
                                                 <button class="btn btn-sm btn-danger btn-action"
                                                         title="Dead on Arrival"
                                                         data-toggle="modal"
@@ -122,7 +124,6 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                                                         data-code="{{ $row->code}}">
                                                         <i class="fas fa-skull-crossbones"></i>
                                                 </button>
-                                              
 
                                                 <button class="btn btn-sm btn-success btn-action btn-transfer"
                                                         title="Transfer Patient"
@@ -134,7 +135,7 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                                                         data-code="{{ $row->code}}">
                                                     <i class="fa fa-ambulance"></i>
                                                 </button>
-                                            @elseif( ($status=='ACCEPTED' || $status == 'TRAVEL') && $diff >= 4)
+                                            @elseif( ($status == 'ACCEPTED' || $status == 'TRAVEL') && $diff >= 4)
                                                 <button class="btn btn-sm btn-danger btn-action"
                                                         title="Patient Didn't Arrive"
                                                         data-toggle="modal"
@@ -145,10 +146,9 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                                                         data-code="{{ $row->code}}">
                                                     <i class="fa fa-wheelchair"></i>
                                                 </button>
-                                            
                                             @endif
 
-                                            @if($status=='ARRIVED' || $status=='ADMITTED' || $status=='MONITORED')
+                                            @if($status == 'ARRIVED' || $status == 'ADMITTED' || $status == 'MONITORED')
                                                 @if( $status != 'MONITORED' && $status != 'ADMITTED')
                                                     <button class="btn btn-sm btn-info btn-action"
                                                             title="Patient Admitted"
@@ -208,6 +208,7 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                                                         data-code="{{ $row->code}}">
                                                     <i class="fa fa-ambulance"></i>
                                                 </button>
+
                                                 <a href="#viewupload_modal"
                                                     title="Patient Uploads"
                                                     data-toggle="modal"
@@ -215,16 +216,14 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
                                                     data-id = "{{ $row->id }}"
                                                     class="btn btn-info btn-sm btn-action viewupload_code">
                                                     <i class="fa fa-file"></i>
-                                                        
-                                                    </a>
+                                                </a>
                                             @endif
 
-                                            @if($step<=4)
+                                            @if($step <= 4)
                                                 <button class="btn btn-sm btn-info btn-feedback" data-toggle="modal"
                                                         data-target="#feedbackModal"
                                                         data-code="{{ $row->code }}">
                                                     <i class="fa fa-comments"> {{ $feedback }}</i>
-
                                                 </button>
                                             @endif
                                         </td>

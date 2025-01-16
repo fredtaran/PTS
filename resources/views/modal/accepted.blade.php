@@ -246,7 +246,7 @@
                     <div class="form-group">
                         <label style="padding: 0px">Delivery Outcome: </label>
                         <br />
-                        <select name="delivery_outcome" class="form-control-select select2" required>
+                        <select name="delivery_outcome" class="form-control select2" required>
                             <option value="">Select Outcome...</option>
                             <option value="fullterm">Fullterm</option>
                             <option value="preterm">Preterm</option>
@@ -258,7 +258,7 @@
                     <div class="form-group">
                         <label style="padding: 0px">Birth Attendant: </label>
                         <br />
-                        <select name="birth_attendant" class="form-control-select select2" required>
+                        <select name="birth_attendant" class="form-control select2" required>
                             <option value="">Select Attendant...</option>
                             <option value="md">MD</option>
                             <option value="rn">RN</option>
@@ -269,7 +269,7 @@
                     <div class="form-group">
                         <label style="padding: 0px">Status on Discharge:</label>
                         <br />
-                        <select name="status_on_discharge" class="form-control-select select2" required>
+                        <select name="status_on_discharge" class="form-control select2" required>
                             <option value="">Select Status...</option>
                             <option value="expired">Expired</option>
                             <option value="improved">Improved</option>
@@ -280,7 +280,7 @@
                     <div class="form-group">
                         <label style="padding: 0px">Type of Delivery: </label>
                         <br />
-                        <select name="type_of_delivery" class="form-control-select select2" required>
+                        <select name="type_of_delivery" class="form-control select2" required>
                             <option value="">Select Delivery...</option>
                             <option value="nsvd">Normal Spontaneous Vaginal Delivery (NSVD)</option>
                             <option value="caesarean">Caesarean Section</option>
@@ -295,10 +295,7 @@
                                                 ->orderby('id','asc')
                                                 ->get();
                         ?>
-                        <label> Final Diagnosis with ICD 10 code:   </label> 
-                        <br />  
-                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-                            <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+                        <label> Final Diagnosis with ICD 10 code:</label> 
                             <select name="final_diagnosis[]" id="choices-multiple-remove-button" class="form-control" style="width: 100%" required multiple>
                                 @foreach($data as $dataa)
                                     <option defaultValue="{{ $dataa->id }}">{{ $dataa->diagcode }} {{ $dataa->diagdesc}}</option>

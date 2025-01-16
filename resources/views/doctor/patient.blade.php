@@ -100,7 +100,7 @@
                             {{ $row->lname }}, {{ $row->fname }} {{ $row->mname }}
                             @endif
                             <br>
-                            @if( $pregv2 && (!is_null($tracking) && $tracking->status != 'discharged') )
+                            @if( $pregv2 && (!is_null($tracking) && $tracking->status != 'discharged' && $tracking->status != 'archived') )
                             <a href="{{ url('doctor/print/form/' . $tracking->id) }}" target="_blank" class="btn-refer-pregnant"> {{ $tracking->code }}</a>
                             @endif
                         </b>
@@ -163,7 +163,7 @@
                                         data-toggle="modal"
                                         class="btn btn-primary btn-xs profile_info btn_refer_preg hide">
                                         <i class="fa fa-stethoscope"></i>
-                                        Refer2
+                                        Refer
                                     </a>
 
                                     <button class="btn btn-xs btn-success btn-action profile_info hide"
@@ -175,7 +175,7 @@
                                         data-patient_id = "{{ $pregv2->patient_woman_id }}"
                                         data-code="{{ $pregv2->code}}">
                                         <i class="fas fa-plus"></i>
-                                        Add2
+                                        Add
                                     </button>
 
                                     <button class="btn btn-xs btn-warning hide btn-action discharge_button"
@@ -208,7 +208,7 @@
                                         data-patient_id = "{{ $pregv2->patient_woman_id }}"
                                         data-code="{{ $pregv2->code}}">
                                         <i class="fas fa-plus"></i>
-                                        Add2
+                                        Add
                                     </button>
                                 @endif
                             @elseif($tracking == null && $activity == null)
@@ -218,7 +218,7 @@
                                     data-toggle="modal"
                                     class="btn btn-primary btn-xs profile_info btn_refer_preg hide">
                                     <i class="fa fa-stethoscope"></i>
-                                    Refer3
+                                    Refer
                                 </a>
                                 @endif
 
@@ -227,15 +227,15 @@
                                     data-toggle="modal"
                                     class="btn btn-success btn-xs profile_info hide">
                                     <i class="fa fa-plus"></i>
-                                    Add3
+                                    Add
                                 </a>
-                            @elseif ( $tracking->status == 'discharged' )
+                            @elseif ( $tracking->status == 'discharged' || $tracking->status == 'archived' )
                                 <a href="#pregnantFormModalTrack"
                                 data-patient_id = "{{ $row->patient_id }}"
                                 data-toggle="modal"
                                 class="btn btn-primary btn-xs profile_info btn_refer_preg hide">
                                     <i class="fa fa-stethoscope"></i>
-                                    Refer4
+                                    Refer
                                 </a>
 
                                 <a href="#pregnantAddData"
@@ -243,7 +243,7 @@
                                 data-toggle="modal"
                                 class="btn btn-success btn-xs profile_info hide">
                                 <i class="fa fa-plus"></i>
-                                    Add4
+                                    Add
                                 </a>
                             @endif
                         @else

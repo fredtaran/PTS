@@ -968,8 +968,8 @@
                     $('.civil_status').val( data.civil_status);    
                     $('.preg_civil_status').html( data.civil_status);
 
-                    $('.unique_id').val(form.unique_id);
-                    $('.code').val(form.code);
+                    $('.unique_id').val(form ? form.unique_id : null);
+                    $('.code').val(form ? form.code : null);
                     
                     $('.patient_id').val(patient_id);
                     $('.patient_name').html(name);
@@ -1038,11 +1038,11 @@
                         weeks = days / 7;
 
                         n = weeks.toFixed(1);
-                        whole = Math.floor(n);      // 1
+                        whole = Math.floor(n); // 1
                         fraction = n - whole; // .25
                         var gcd = function(a, b) {
-                            if (b < 0.0000001) return a;                // Since there is a limited precision we need to limit the value.
-                            return gcd(b, Math.floor(a % b));           // Discard any fractions due to limitations in precision.
+                            if (b < 0.0000001) return a; // Since there is a limited precision we need to limit the value.
+                            return gcd(b, Math.floor(a % b)); // Discard any fractions due to limitations in precision.
                         };
 
                         var fraction = fraction.toFixed(1);
@@ -1065,7 +1065,6 @@
                         }
                     }
                 
-
                     if(ante) {
                         if(ante.hypertension == 'yes') {
                             $('.hypertension').prop('checked', true);

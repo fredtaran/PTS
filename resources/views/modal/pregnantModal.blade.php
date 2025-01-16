@@ -12,7 +12,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="jim-content">
-                <h4>DISCHARGE PATIENT</h4>
+                <h4>DISCHARGE PATIENTs</h4>
 
                 <hr />
 

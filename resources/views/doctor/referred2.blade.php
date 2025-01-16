@@ -74,7 +74,7 @@ $user = Auth::user();
 
     $activities = \App\Models\Activity::select(
                     'activity.*',
-                    DB::raw('CONCAT(users.fname, " ", IFNULL(CONCAT(u.mname, " "), ""), users.lname) as md_name'),
+                    DB::raw('CONCAT(users.fname, " ", IFNULL(CONCAT(u.mname, " "), " "), users.lname) as md_name'),
                     DB::raw('CONCAT(u.fname, " ", IFNULL(CONCAT(u.mname, " "), ""), " ", u.lname) as referring_md'),
                     'users.contact',
                     'fac_rejected.name as fac_rejected',
@@ -409,7 +409,7 @@ $user = Auth::user();
                                     <?php
                                         ($row->type == 'normal') ? $covid_discharge = \App\Models\PatientForm::where("code",$act->code)->first() : $covid_discharge = \App\Models\PregnantForm::where("code", $act->code)->first();
                                     ?>
-                                    @if($covid_discharge->dis_clinical_status || $covid_discharge->dis_sur_category)
+                                    @if(@$covid_discharge->dis_clinical_status || @$covid_discharge->dis_sur_category)
                                     <span class="remarks">Clinical Status: <b>{{ ucfirst($covid_discharge->dis_clinical_status) }}</b></span>
                                     <span class="remarks">Surveillance Category: <b>{{ ucfirst($covid_discharge->dis_sur_category) }}</b></span>
                                     @endif
@@ -433,7 +433,7 @@ $user = Auth::user();
                                     <?php
                                         ($row->type == 'normal') ? $covid_discharge = \App\Models\PatientForm::where("code", $act->code)->first() : $covid_discharge = \App\Models\PregnantForm::where("code", $act->code)->first();
                                     ?>
-                                    @if($covid_discharge->dis_clinical_status || $covid_discharge->dis_sur_category)
+                                    @if(@$covid_discharge->dis_clinical_status || @$covid_discharge->dis_sur_category)
                                     <span class="remarks">Clinical Status: <b>{{ ucfirst($covid_discharge->dis_clinical_status) }}</b></span>
                                     <span class="remarks">Surveillance Category: <b>{{ ucfirst($covid_discharge->dis_sur_category) }}</b></span>
                                     @endif

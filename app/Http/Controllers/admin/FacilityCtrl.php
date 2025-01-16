@@ -372,4 +372,18 @@ class FacilityCtrl extends Controller
 
         return Redirect::back();
     }
+
+    /**
+     * Incident
+     */
+    public function Incident(Request $req)
+    {
+        $data = Incident::find($req->inci_id);
+        $referred_from = $req->referred_from;
+
+        return view('doctor.inci_body', [
+            'data' => $data,
+            'referred_from' => $referred_from
+        ]);
+    }
 }

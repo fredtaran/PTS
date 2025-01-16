@@ -30,10 +30,7 @@ class PrintCtrl extends Controller
         if ($form_type=='normal') {
             $data = ReferralCtrl::normalForm($track_id);
             return self::printNormal($data);
-        } else if ($form_type=='pregnant') {
-            // $data = ReferralCtrl::pregnantForm($track_id);
-            // return self::printPregnant($data); 
-            
+        } else if ($form_type == 'pregnant') {
             $data = ReferralCtrl::pregnantFormv2($track_id);
             Session::put('print_preg', $data);
             return self::printPregnantv2($data);
@@ -45,10 +42,6 @@ class PrintCtrl extends Controller
      */
     public function printPregnantv2($record)
     {
-        // $display = view("doctor.print_pregv2");
-        // $pdf = App::make('dompdf.wrapper');
-        // $pdf->loadHTML($display);
-        // return $pdf->stream();
         return view('doctor.print_pregv2', [
             'data' => $record
         ]);

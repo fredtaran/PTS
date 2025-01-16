@@ -1,6 +1,6 @@
 <script type="module">
 import { app } from '{{ asset("js/firebase.js") }}'
-import { getDatabase, ref, onValue, onChildAdded } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
+import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
 
     $(document).ready(function() {
         var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
@@ -592,10 +592,11 @@ import { getDatabase, ref, onValue, onChildAdded } from 'https://www.gstatic.com
                     };
 
                     $('.activity_' + code).html('ARRIVED');
-                    arriveRef.push(arrive_data);
-                    arriveRef.on('child_added', function(data) {
-                        setTimeout(function() {
-                            arriveRef.child(data.key).remove();
+                    set(ref(db, 'Arrival/' + track_id), arrive_data);
+
+                    onChildAdded(ref(db, 'Arrival'), (snapshot) => {
+                        setTimeout(() => {
+                            remove(ref(db, 'Arrival/' + snapshot.key))
                             var msg = 'Patient arrived to your facility';
                             $('.info').removeClass('hide').find('.message').html(msg);
                             $('#arriveModal').modal('hide');
@@ -627,11 +628,11 @@ import { getDatabase, ref, onValue, onChildAdded } from 'https://www.gstatic.com
                         remarks: remarks
                     };
 
-                    $('.activity_' + code).html('ARCHIVED');
-                    arriveRef.push(arrive_data);
-                    arriveRef.on('child_added', function(data) {
-                        setTimeout(function(){
-                            arriveRef.child(data.key).remove();
+                    set(ref(db, 'Archive/' + track_id), arrive_data);
+
+                    onChildAdded(ref(db, 'Archive'), (snapshot) => {
+                        setTimeout(() => {
+                            remove(ref(db, 'Archive/' + snapshot.key))
                             var msg = 'Patient archived';
                             $('.info').removeClass('hide').find('.message').html(msg);
                             $('#arriveModal').modal('hide');
@@ -696,10 +697,11 @@ import { getDatabase, ref, onValue, onChildAdded } from 'https://www.gstatic.com
                         current_facility: current_facility
                     };
 
-                    admitRef.push(arrive_data);
-                    admitRef.on('child_added', function(data) {
-                        setTimeout(function() {
-                            admitRef.child(data.key).remove();
+                    set(ref(db, 'Admit/' + track_id), arrive_data);
+
+                    onChildAdded(ref(db, 'Admit'), (snapshot) => {
+                        setTimeout(() => {
+                            remove(ref(db, 'Admit/' + snapshot.key))
                             var msg = 'Patient admitted to your facility';
                             $('.info').removeClass('hide').find('.message').html(msg);
                             $('#admitModal').modal('hide');
@@ -735,11 +737,12 @@ import { getDatabase, ref, onValue, onChildAdded } from 'https://www.gstatic.com
                         remarks: remarks
                     };
 
-                    dischargetRef.push(arrive_data);
-                    dischargetRef.on('child_added', function(data) {
-                        setTimeout(function() {
-                            dischargetRef.child(data.key).remove();
-                            window.location.reload(false);
+                    set(ref(db, 'Discharge/' + track_id), arrive_data);
+
+                    onChildAdded(ref(db, 'Discharge'), (snapshot) => {
+                        setTimeout(() => {
+                            remove(ref(db, 'Discharge/' + snapshot.key))
+                            window.location.reload(true);
                         }, 500);
                     });
                 },

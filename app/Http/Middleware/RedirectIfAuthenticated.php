@@ -22,9 +22,9 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                $user = Session::get('auth');
+                $user = Auth::user();
                 $date_now = date("Y-m-d");
-                $check_login_now = \App\Login::where("userId", $user->id)->where("login", "like", "%$date_now%")->first();
+                $check_login_now = \App\Models\Login::where("userId", $user->id)->where("login", "like", "%$date_now%")->first();
                 if(!$user){
                     return redirect('/login');
                 }

@@ -21,7 +21,7 @@ class PregnantCtrl extends Controller
         $user = Auth::user();
         $keyword = null;
 
-        $data = PregnantFormv2::selectRaw('t2.maxid as notif_id, ROUND(DATEDIFF(CURDATE(), pregnant_formv2.lmp) / 7, 2) as now, pregnant_formv2.lmp, t2.maxaog, CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as woman_name, tracking.id as id, tracking.*, tracking.code as patient_code, CONCAT(action.fname, " ", action.mname, " ", action.lname) as action_md')
+        $data = PregnantFormv2::selectRaw('t2.maxid as notif_id, ROUND(DATEDIFF(CURDATE(), pregnant_formv2.lmp) / 7, 2) as now, pregnant_formv2.lmp, t2.maxaog, CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as woman_name, tracking.id as id, tracking.*, tracking.code as patient_code, CONCAT(action.fname, " ", action.mname, " ", action.lname) as action_md')
         ->leftJoin(DB::raw('(SELECT *, max(id) as maxid, max(aog) as maxaog, max(unique_id) as maxunique_id FROM sign_and_symptoms A GROUP BY unique_id, id, code, patient_woman_id, no_trimester, no_visit, date_of_visit, vaginal_spotting, severe_nausea, significant_decline, premature_rupture, fetal_pregnancy, severe_headache, abdominal_pain, edema_hands, fever_pallor, seizure_consciousness, difficulty_breathing, difficulty_breathing, painful_urination, updated_at, created_at, subjective, bp, temp, hr, rr, fh, fht, other_physical_exam, assessment_diagnosis, elevated_bp, plan_intervention, aog, persistent_contractions) AS t2'), function($join) {
             $join->on('pregnant_formv2.unique_id', '=', 't2.maxunique_id');
         })

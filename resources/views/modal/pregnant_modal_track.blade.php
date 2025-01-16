@@ -14,7 +14,7 @@
             <form method="POST" class="form-submit" action="{{ url('doctor/patient/refer/pregnant') }}" id="pregnant_form_new">
                 <div class="jim-content">
                     @include('include.header_form')
-                    <div class="title-form">Risk Assessment Check List1 for Pregnant Women</div>
+                    <div class="title-form">Risk Assessment Check List(Refer directly) for Pregnant Women</div>
                         {{ csrf_field() }}
                         <input type="hidden" name="patient_id" class="patient_id" value="" />
                         <input type="hidden" name="date_referred" class="date_referred" value="{{ date('Y-m-d H:i:s') }}" />
@@ -494,9 +494,9 @@
                                         <div id="previous" class="tab-pane fade in active">
                                             <table class="table table-striped sign_symthoms_table">
                                                 <tr class="bg-gray">
-                                                    <th rowspan="4" width="50%"> 
-                                                        <br><br><br><br><br><h3>Risk Factor</h3>
-                                                        (CHECK AT LEAST ONE OF THE SYMPTOM OR SIGN)
+                                                    <th rowspan="4" width="50%" style="vertical-align: middle;">
+                                                        <h3>Risk Factor</h3>
+                                                        <!-- (CHECK AT LEAST ONE OF THE SYMPTOM OR SIGN) -->
                                                     </th>
 
                                                     <th> 
@@ -714,7 +714,7 @@
             <form method="POST" class="form-submit" action="{{ url('doctor/pregnant/add/info') }}" id="pregnant_add_form">
                 <div class="jim-content">
                     @include('include.header_form')
-                    <div class="title-form">Risk Assessment Check List2 for Pregnant Women</div>
+                    <div class="title-form">Risk Assessment Check List for Pregnant Women</div>
 
                     {{ csrf_field() }}
 
@@ -859,7 +859,7 @@
                                         </td>
 
                                         <td>
-                                            Fundal Height:
+                                            Fundal Height(cm):
                                             <input type="text" class="form-control fh_personnal" name="fundic_height" style="width: 100%;" required>
                                         </td>
 
@@ -1144,9 +1144,8 @@
                                     <div id="previous" class="tab-pane fade in active">
                                         <table class="table table-striped sign_symthoms_table">
                                             <tr class="bg-gray">
-                                                <th rowspan="4" width="50%"> 
-                                                    <br><br><br><br><br><h3>Risk Factor</h3>
-                                                        (CHECK AT LEAST ONE OF THE SYMPTOM OR SIGN)
+                                                <th rowspan="4" width="50%">
+                                                    <h3>Risk Factor</h3>
                                                 </th>
 
                                                 <th> 

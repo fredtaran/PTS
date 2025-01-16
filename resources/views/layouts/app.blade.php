@@ -14,7 +14,6 @@
 
     <!-- SELECT 2 -->
     @vite('resources/select2/dist/css/select2.min.css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Bootstrap core CSS -->
     @vite('resources/assets/css/bootstrap.min.css')
@@ -229,7 +228,7 @@
                     ROUND(DATEDIFF(CURDATE(),pregnant_formv2.lmp) / 7, 2) as `now`, 
                     pregnant_formv2.lmp, 
                     t2.maxaog, 
-                    CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as woman_name, 
+                    CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as woman_name, 
                     tracking.code as patient_code, 
                     tracking.notif as notif'
                 )->leftJoin(DB::raw('(SELECT *, 
@@ -288,7 +287,7 @@
                     ROUND(DATEDIFF(CURDATE(), pregnant_formv2.lmp) / 7, 0) as now, 
                     pregnant_formv2.lmp, 
                     t2.maxaog,
-                    CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as woman_name, 
+                    CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as woman_name, 
                     tracking.code as patient_code, tracking.notif as notif'
                 )->leftJoin(\DB::raw('(SELECT *, 
                         max(id) as maxid, 
@@ -1262,7 +1261,8 @@
 @vite('resources/plugin/bower_components/jquery-ui/jquery-ui.min.js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-@vite('resources/assets/js/jquery.form.min.js')
+<!-- @vite('resources/assets/js/jquery.form.min.js') -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha512-YUkaLm+KJ5lQXDBdqBqk7EVhJAdxRnVdT2vtCzwPHSweCzyMgYV/tgGF4/dCyqtCC2eCphz0lRQgatGVdfR0ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @vite('resources/assets/js/bootstrap.min.js')
 
@@ -1395,7 +1395,7 @@
 
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
-        $('body,html').animate({
+        $('body, html').animate({
             scrollTop : 0 // Scroll to top of body
         }, 500);
     }
@@ -1409,6 +1409,5 @@
 @include('script.notification')
 
 @yield('js')
-
 </body>
 </html>

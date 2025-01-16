@@ -12,6 +12,7 @@ use App\Models\Tracking;
 use App\Models\LabResult;
 use App\Models\Antepartum;
 use App\Models\PregOutcome;
+use App\Models\PregnantForm;
 use App\Models\SignSymptoms;
 use Illuminate\Http\Request;
 use App\Models\PregVitalSign;
@@ -20,6 +21,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ParamCtrl;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\DeviceTokenCtrl;
 
 class ReferralCtrl extends Controller
 {
@@ -37,12 +40,12 @@ class ReferralCtrl extends Controller
         $user = Auth::user();
         $data = Tracking::select(
                     'tracking.*', 
-                    DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+                    DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
                     DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
                     'patients.sex',
                     'facility.name as facility_name',
                     DB::raw('CONCAT(if(users.level = "doctor", "Dr. ", ""), users.fname, " ", IFNULL(CONCAT(users.mname, " "), ""), users.lname) as referring_md'),
-                    DB::raw('CONCAT(action.fname, " ", action.mname, " ", action.lname) as action_md')
+                    DB::raw('CONCAT(action.fname, " ", IFNULL(CONCAT(users.mname, " "), ""), " ", action.lname) as action_md')
                 )
                 ->join('patients', 'patients.id', '=', 'tracking.patient_id')
                 ->join('facility', 'facility.id', '=', 'tracking.referred_from')
@@ -174,7 +177,7 @@ class ReferralCtrl extends Controller
                     'patients.civil_status as woman_status',
                     'patients.phic_id as phic_id',
                     'patients.contact as contact',
-                DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as woman_name'),
+                DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as woman_name'),
                 DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS woman_age"),
                 'patients.sex',
                 DB::raw("DATE_FORMAT(patients.dob, '%M %d, %Y') as bday"),
@@ -465,7 +468,7 @@ class ReferralCtrl extends Controller
     /**
      * Discharge patient
      */
-    public function discharge2 (Request $req, $track_id, $unique_id)
+    public function discharge2(Request $req, $track_id, $unique_id)
     {
         $user = Auth::user();
         $date = date('Y-m-d H:i:s', strtotime($req->date_time));
@@ -505,6 +508,8 @@ class ReferralCtrl extends Controller
             'referred_from' => $track->referred_to,
             'referred_to' => 0,
             'action_md' => $user->id,
+            'department_id' => $track->department_id,
+            'referring_md' => $track->referring_md,
             'remarks' => $req->remarks,
             'status' => 'discharged'
         );
@@ -536,7 +541,7 @@ class ReferralCtrl extends Controller
             ParamCtrl::lastLogin();
             $data = Tracking::select(
                 'tracking.*',
-                DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+                DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
                 DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
                 DB::raw('CONCAT(users.fname, " ", IFNULL(CONCAT(users.mname, " "), ""), users.lname) as referring_md'),
                 'patients.sex',
@@ -557,7 +562,7 @@ class ReferralCtrl extends Controller
             $user = Auth::user();
             $data = Tracking::select(
                 'tracking.*',
-                DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+                DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
                 DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
                 DB::raw('COALESCE(CONCAT(users.fname, " ", IFNULL(CONCAT(users.mname, " "), ""), users.lname), "WALK IN") as referring_md'),
                 'patients.sex',
@@ -715,7 +720,7 @@ class ReferralCtrl extends Controller
         ParamCtrl::lastLogin();
         $data = Tracking::select(
             'tracking.*',
-            DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
             DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
             DB::raw('CONCAT(users.fname, " ", users.mname, " ", users.lname) as referring_md'),
             'patients.sex',
@@ -748,7 +753,7 @@ class ReferralCtrl extends Controller
             t2.maxid as notif_id, 
             ROUND(DATEDIFF(CURDATE(), pregnant_formv2.lmp) / 7, 2) as now, 
             pregnant_formv2.lmp, 
-            t2.maxaog,CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as woman_name,
+            t2.maxaog,CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as woman_name,
             tracking.id as id, 
             tracking.*, 
             tracking.code as patient_code, 
@@ -842,7 +847,7 @@ class ReferralCtrl extends Controller
     public function seenByList($track_id)
     {
         $data = Seen::select(
-            DB::raw('CONCAT(users.fname, " ", IFNULL(CONCAT(users.mname, " "), ""), " ", users.lname) as user_md'),
+            DB::raw('CONCAT(users.fname, " ", IFNULL(CONCAT(users.mname, " "), " "), users.lname) as user_md'),
             DB::raw("DATE_FORMAT(seen.created_at, '%M %d, %Y %h:%i %p') as date_seen"),
             'users.contact'
         )
@@ -878,7 +883,7 @@ class ReferralCtrl extends Controller
 
         $doc = User::find($user->id);
         $name = ucwords(mb_strtolower($doc->fname)) . " " . ucwords(mb_strtolower($doc->lname));
-        $referred_name = User::select(DB::raw('CONCAT(if(level = "doctor", "Dr. ", ""), fname, " ", IFNULL(CONCAT(mname, " "), ""), lname) as referring_md'))
+        $referred_name = User::select(DB::raw('CONCAT(if(level = "doctor", "Dr. ", ""), fname, " ", IFNULL(CONCAT(mname, " "), " "), lname) as referring_md'))
             ->where('id', $activity->referring_md)
             ->first();
         $hosp = Facility::find($track->referred_to)->name;
@@ -898,7 +903,7 @@ class ReferralCtrl extends Controller
     public function callerByList($track_id)
     {
         $data = Tracking::select(
-            DB::raw("CONCAT('Dr. ', users.fname, ' ', IFNULL(CONCAT(mname, ' '), ''), users.lname) as user_md"),
+            DB::raw("CONCAT('Dr. ', users.fname, ' ', IFNULL(CONCAT(mname, ' '), ' '), users.lname) as user_md"),
             DB::raw("DATE_FORMAT(activity.created_at, '%M %d, %Y %h:%i %p') as date_call"),
             "users.contact"
         )
@@ -960,5 +965,181 @@ class ReferralCtrl extends Controller
             "name" => $name,
             "message" => $req->message
         ]);
+    }
+
+    /**
+     * Accept referral
+     */
+    public function accept(Request $req, $track_id)
+    {
+        $user = Auth::user();
+
+        $track = Tracking::find($track_id);
+        if($track->status == 'accepted' || $track->status == 'rejected') {
+            Session::put('incoming_denied', true);
+            return 'denied';
+        }
+
+        Tracking::where('id', $track_id)
+            ->update([
+                'status' => 'accepted',
+                'action_md' => $user->id,
+                'date_accepted' => date('Y-m-d H:i:s')
+            ]);
+
+        $track = Tracking::find($track_id);
+        $data = array(
+            'code' => $track->code,
+            'patient_id' => $track->patient_id,
+            'date_referred' => date('Y-m-d H:i:s'),
+            'referred_from' => $track->referred_from,
+            'referred_to' => $user->facility_id,
+            'department_id' => $track->department_id,
+            'referring_md' => $track->referring_md,
+            'action_md' => $user->id,
+            'remarks' => isset($req->remarks) ? $req->remarks : "",
+            'status_on_er' => isset($req->status_on_er) ? $req->status_on_er : "",
+            'status' => $track->status
+        );
+        Activity::create($data);
+
+        return $track_id;
+    }
+
+    /**
+     * Step v2
+     */
+    static function step_v2($status){
+        $step = 0;
+        if($status == 'referred')
+            $step = 1;
+        elseif($status == 'seen')
+            $step = 2;
+        elseif($status == 'accepted')
+            $step = 3;
+        elseif($status == 'arrived')
+            $step = 4;
+        elseif($status == 'admitted')
+            $step = 5;
+        elseif($status == 'monitored')
+            $step = 5.1;
+        elseif($status == 'discharged')
+            $step = 6;
+        elseif($status == 'transferred')
+            $step = 6;
+        elseif($status == 'cancelled')
+            $step = 0;
+        elseif($status == 'archived')
+            $step = 4.5;
+
+        return $step;
+    }
+
+    /**
+     * Patient arrived
+     */
+    public function arrive(Request $req, $track_id)
+    {
+        $user = Auth::user();
+        $date = date('Y-m-d H:i:s');
+        $track = Tracking::find($track_id);
+        $data = array(
+            'code' => $track->code,
+            'patient_id' => $track->patient_id,
+            'date_referred' => $date,
+            'referred_from' => $track->referred_to,
+            'referred_to' => $user->facility_id,
+            'action_md' => $user->id,
+            'department_id' => $track->department_id,
+            'referring_md' => $track->referring_md,
+            'remarks' => $req->remarks,
+            'status' => 'arrived'
+        );
+        Activity::create($data);
+
+        Tracking::where("id", $track_id)
+                ->update([
+                    'date_arrived' => $date,
+                    'status' => 'arrived'
+                ]);
+        PregnantForm::where('id', $track->form_id)
+                ->update([
+                    'arrival_date' => $date
+                ]);
+
+        $hosp = Facility::find($user->facility_id)->name;
+        $msg = "$track->code arrived at $hosp.";
+        DeviceTokenCtrl::send('Arrived', $msg, $track->referred_from);
+
+        return date('M d, Y h:i A', strtotime($date));
+    }
+
+    /**
+     * Patient admitted
+     */
+    public function admit(Request $req, $track_id)
+    {
+        $user = Auth::user();
+        $date = date('Y-m-d H:i:s', strtotime($req->date_time));
+        $track = Tracking::find($track_id);
+        $data = array(
+            'code' => $track->code,
+            'patient_id' => $track->patient_id,
+            'date_referred' => $date,
+            'referred_from' => $track->referred_to,
+            'referred_to' => $user->facility_id,
+            'action_md' => $user->id,
+            'department_id' => $track->department_id,
+            'referring_md' => $track->referring_md,
+            'remarks' => 'admitted',
+            'status' => 'admitted'
+        );
+        Activity::create($data);
+
+        Tracking::where('id', $track_id)
+            ->update([
+                'status' => 'admitted'
+            ]);
+
+        $hosp = Facility::find($user->facility_id)->name;
+        $msg = "$track->code admitted at $hosp.";
+        DeviceTokenCtrl::send('Admitted', $msg, $track->referred_from);
+
+        return date('M d, Y h:i A', strtotime($date));
+    }
+
+    /**
+     * Archive patient
+     */
+    public function archive(Request $req, $track_id)
+    {
+        $user = Auth::user();
+        $date = date('Y-m-d H:i:s');
+        $track = Tracking::find($track_id);
+        $data = array(
+            'code' => $track->code,
+            'patient_id' => $track->patient_id,
+            'date_referred' => $date,
+            'referred_from' => $track->referred_to,
+            'referred_to' => 0,
+            'action_md' => $user->id,
+            'department_id' => $track->department_id,
+            'referring_md' => $track->referring_md,
+            'remarks' => $req->remarks,
+            'status' => 'archived'
+        );
+        Activity::create($data);
+
+        Tracking::where("id",$track_id)
+                ->update([
+                    'date_arrived' => $date,
+                    'status' => 'archived'
+                ]);
+        PregnantForm::where('id',$track->form_id)
+                ->update([
+                    'arrival_date' => $date
+                ]);
+
+        return date('M d, Y h:i A', strtotime($date));
     }
 }

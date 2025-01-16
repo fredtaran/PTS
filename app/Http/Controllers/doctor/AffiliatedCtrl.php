@@ -48,26 +48,26 @@ class AffiliatedCtrl extends Controller
             'tracking.type',
             'tracking.code',
             'facility.name',
-            DB::raw('CONCAT(patients.fname," ",patients.mname," ",patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
             DB::raw("DATE_FORMAT(tracking.date_accepted,'%M %d, %Y %h:%i %p') as date_accepted")
         )
-            ->join('facility','facility.id','=','tracking.referred_from')
-            ->join('patients','patients.id','=','tracking.patient_id')
-            ->join('patient_form','patient_form.patient_id','=','tracking.patient_id')
-            ->where('patient_form.referred_md',$user->id)
+            ->join('facility', 'facility.id', '=', 'tracking.referred_from')
+            ->join('patients', 'patients.id', '=', 'tracking.patient_id')
+            ->join('patient_form', 'patient_form.patient_id', '=', 'tracking.patient_id')
+            ->where('patient_form.referred_md', $user->id)
             ->whereExists(function($query) use($id)
             {
                 $query->select(DB::raw(1))
                 ->from('affiliated')
                         ->whereRaw('tracking.referred_to = affiliated.facility_id')
-                    ->where('affiliated.user_id',$id);
+                    ->where('affiliated.user_id', $id);
             }) 
             ->where(function($q){
-                $q->where('tracking.status','referred')
-                ->orwhere('tracking.status','seen')
-                ->orWhere('tracking.status','transferred');
+                $q->where('tracking.status', 'referred')
+                ->orwhere('tracking.status', 'seen')
+                ->orWhere('tracking.status', 'transferred');
             })
-            ->where(DB::raw("TIMESTAMPDIFF(MINUTE,date_referred,now())"),"<=",4320)
+            ->where(DB::raw("TIMESTAMPDIFF(MINUTE,date_referred,now())"), "<=",4320)
             ->count();
         return $data;
     }
@@ -148,7 +148,7 @@ class AffiliatedCtrl extends Controller
 
         $data = Tracking::select(
             'tracking.*', 
-            DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
             DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
             'patients.sex',
             'facility.name as facility_name',

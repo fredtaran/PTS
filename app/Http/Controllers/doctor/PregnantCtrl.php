@@ -32,7 +32,6 @@ class PregnantCtrl extends Controller
         $user_code = str_pad($user->facility_id, 3, 0, STR_PAD_LEFT);
         $code = date('ymd') . '-' . $user_code . '-' . date('His');
         $tracking_id = 0;
-        // $case_summary = implode(" , ", $req->case_summary); 
 
         $unique_id = "$patient_id-$user->facility_id-" . date('ymdH');
 
@@ -54,8 +53,8 @@ class PregnantCtrl extends Controller
             'health_worker'         => ($req->health_worker) ? $req->health_worker : NULL,
             'patient_woman_id'      => $req->patient_id,
             'gravidity'             => ($req->gravidity) ? $req->gravidity : NULL,
-            'parity'                => ($req->parity) ? $req->parity : NULL,
-            'ftpal'                 => ($req->ftpal) ? $req->ftpal : NULL,
+            'parity'                => ($req->parity || $req->parity == 0) ? $req->parity : NULL,
+            'ftpal'                 => ($req->ftpal || $req->ftpal == 0) ? $req->ftpal : NULL,
             'bmi'                   => ($req->bmi) ? $req->bmi : NULL,
             'fundic_height'         => ($req->fundic_height) ? $req->fundic_height : NULL,
             'hr'                    => ($req->hr) ? $req->hr : NULL,
@@ -130,7 +129,7 @@ class PregnantCtrl extends Controller
             'hr'                        => ($req->ante_hr) ? $req->ante_hr : NULL,
             'rr'                        => ($req->ante_rr) ? $req->ante_rr : NULL,
             'fh'                        => ($req->ante_fh) ? $req->ante_fh : NULL,
-            'fht'                       => ($req->ante_fht) ? $req->ante_fht : NULL,
+            'fht'                       => ($req->ante_fht || $req->ante_fht == 0) ? $req->ante_fht : NULL,
             'other_physical_exam'       => ($req->ante_other_physical_exam) ? $req->ante_other_physical_exam : NULL,
             'assessment_diagnosis'      => ($req->ante_assessment_diagnosis) ? $req->ante_assessment_diagnosis : NULL,
             'plan_intervention'         => ($req->ante_plan_intervention) ? $req->ante_plan_intervention : NULL,

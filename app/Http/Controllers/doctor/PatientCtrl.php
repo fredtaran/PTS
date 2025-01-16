@@ -254,8 +254,7 @@ class PatientCtrl extends Controller
     {
         $data = Patients::find($id);
 
-        if ($data->brgy)
-        {
+        if ($data->brgy) {
             $brgy = Barangay::find($data->brgy)->description;
             $muncity = Muncity::find($data->muncity)->description;
             $province = Province::find($data->province)->description;
@@ -267,14 +266,13 @@ class PatientCtrl extends Controller
         $data->patient_name = "$data->fname $data->mname $data->lname";
         $data->age = ParamCtrl::getAge($data->dob);
         
-        $sign = SignSymptoms::select('*')->where('patient_woman_id',$id)->orderby('created_at','desc')->first();
+        $sign = SignSymptoms::select('*')->where('patient_woman_id', $id)->orderby('created_at', 'desc')->first();
 
-        $form = PregnantFormv2::select('*')->where('patient_woman_id',$id)->orderby('created_at','desc')->first();
+        $form = PregnantFormv2::select('*')->where('patient_woman_id', $id)->orderby('created_at', 'desc')->first();
         
-        $ante = Antepartum::select('*')->where('patient_woman_id',$id)->latest()->first();
+        $ante = Antepartum::select('*')->where('patient_woman_id', $id)->latest()->first();
 
-        $lab = LabResult::select('*')->where('patient_woman_id',$id)->wherenotnull('blood_type')->latest()->first();
-
+        $lab = LabResult::select('*')->where('patient_woman_id', $id)->wherenotnull('blood_type')->latest()->first();
 
         return response()->json([
             'data' => $data,
@@ -303,7 +301,7 @@ class PatientCtrl extends Controller
             'facility.name',
             'pregnant_formv2.unique_id',
             'tracking.patient_id',
-            DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), ""), patients.lname) as patient_name'),
             DB::raw("DATE_FORMAT(tracking.date_accepted, '%M %d, %Y %h:%i %p') as date_accepted")
         )
         ->join('facility', 'facility.id', '=', 'tracking.referred_from')
@@ -329,11 +327,11 @@ class PatientCtrl extends Controller
         if($start && $end) {
             $start = Carbon::parse($start)->startOfDay();
             $end = Carbon::parse($end)->endOfDay();
-            $data1 = $data1->whereBetween('tracking.date_accepted', [$start,$end]);
+            $data1 = $data1->whereBetween('tracking.date_accepted', [$start, $end]);
         } else {
             $start = \Carbon\Carbon::now()->startOfYear();
             $end = \Carbon\Carbon::now()->endOfYear();
-            $data1 = $data1->whereBetween('tracking.date_accepted', [$start,$end]);
+            $data1 = $data1->whereBetween('tracking.date_accepted', [$start, $end]);
         }
 
         $data = Tracking::select(
@@ -343,14 +341,14 @@ class PatientCtrl extends Controller
             'facility.name',
             'pregnant_formv2.unique_id',
             'tracking.patient_id',
-            DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), ""), patients.lname) as patient_name'),
             DB::raw("DATE_FORMAT(tracking.date_accepted, '%M %d, %Y %h:%i %p') as date_accepted")
         )
-        ->join('facility','facility.id','=','tracking.referred_from')
-        ->join('patients','patients.id','=','tracking.patient_id')
-        ->join('patient_form','patient_form.patient_id','=','tracking.patient_id')
-        ->join('pregnant_formv2','pregnant_formv2.id','=','tracking.form_id')
-        ->where('patient_form.referred_md',$user->id)
+        ->join('facility', 'facility.id', '=', 'tracking.referred_from')
+        ->join('patients', 'patients.id', '=', 'tracking.patient_id')
+        ->join('patient_form', 'patient_form.patient_id', '=', 'tracking.patient_id')
+        ->join('pregnant_formv2', 'pregnant_formv2.id', '=', 'tracking.form_id')
+        ->where('patient_form.referred_md', $user->id)
         ->whereExists(function($query) use($id) {
             $query->select(DB::raw(1))
                     ->from('affiliated')
@@ -375,11 +373,11 @@ class PatientCtrl extends Controller
         if($start && $end) {
             $start = Carbon::parse($start)->startOfDay();
             $end = Carbon::parse($end)->endOfDay();
-            $data = $data->whereBetween('tracking.date_accepted', [$start,$end]);
+            $data = $data->whereBetween('tracking.date_accepted', [$start, $end]);
         } else {
             $start = \Carbon\Carbon::now()->startOfYear();
             $end = \Carbon\Carbon::now()->endOfYear();
-            $data = $data->whereBetween('tracking.date_accepted', [$start,$end]);
+            $data = $data->whereBetween('tracking.date_accepted', [$start, $end]);
         }
  
         $data = $data->union($data1)->orderBy('id', 'desc')->get();
@@ -457,7 +455,7 @@ class PatientCtrl extends Controller
                     'tracking.code',
                     'facility.name',
                     'tracking.status',
-                    DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+                    DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
                     DB::raw("DATE_FORMAT(tracking.updated_at, '%M %d, %Y %h:%i %p') as date_accepted")
                 )
                 ->join('facility', 'facility.id', '=', 'tracking.referred_from')
@@ -533,7 +531,7 @@ class PatientCtrl extends Controller
                     'activity.code',
                     'facility.name',
                     'activity.status',
-                    DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+                    DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
                     DB::raw("DATE_FORMAT(tracking.updated_at, '%M %d, %Y %h:%i %p') as date_accepted")
                 )
                 ->leftJoin('tracking', 'activity.code', '=', 'tracking.code')
@@ -594,7 +592,7 @@ class PatientCtrl extends Controller
             'tracking.type',
             'tracking.code',
             'facility.name',
-            DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
             DB::raw("DATE_FORMAT(tracking.updated_at, '%M %d, %Y %h:%i %p') as date_accepted")
         )
             ->join('facility', 'facility.id', '=', 'tracking.referred_from')
@@ -659,7 +657,7 @@ class PatientCtrl extends Controller
             'tracking.type',
             'tracking.code',
             'facility.name',
-            DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
             DB::raw("DATE_FORMAT(tracking.updated_at, '%M %d, %Y %h:%i %p') as date_accepted")
         )
             ->join('facility', 'facility.id', '=', 'tracking.referred_from')
@@ -795,41 +793,41 @@ class PatientCtrl extends Controller
             $td5 = ($req->td5) ? date('Ymd', strtotime($req->td1)) : NULL;
 
             $data = array(
-                'unique_id' => $unique_id,
-                'referring_facility' => ($user->facility_id) ? $user->facility_id : NULL,
-                'referred_by' => ($user->id) ? $user->id : NULL,
-                'record_no' => ($req->record_no) ? $req->record_no : NULL,
-                'referred_date' => date('Y-m-d H:i:s'),
-                'referred_to' => ($req->referred_facility) ? $req->referred_facility : NULL,
-                'department_id' => ($req->referred_department) ? $req->referred_department : NULL,
-                'covid_number' => $req->covid_number,
-                'health_worker' => ($req->health_worker) ? $req->health_worker : NULL,
-                'patient_woman_id' => $patient_id,
-                'gravidity' => ($req->gravidity) ? $req->gravidity : NULL,
-                'parity' => ($req->parity) ? $req->parity : NULL,
-                'ftpal' => ($req->ftpal) ? $req->ftpal : NULL,
-                'bmi' => ($req->bmi) ? $req->bmi : NULL,
-                'fundic_height' => ($req->fundic_height) ? $req->fundic_height : NULL,
-                'hr' => ($req->hr) ? $req->hr : NULL,
-                'lmp' => ($lmp) ? $lmp : NULL,
-                'edc_edd' => ($edc_edd) ? $edc_edd : NULL,
-                'height' => ($req->height) ? $req->height : NULL,
-                'weigth' => ($req->weigth) ? $req->weigth : NULL,
-                'bp' => ($req->bp) ? $req->bp : NULL,
-                'temp' => ($req->temp) ? $req->temp : NULL,
-                'rr' => ($req->rr) ? $req->rr : NULL,
-                'td1' => ($td1) ? $td1 : NULL,
-                'td2' => ($td2) ? $td2 : NULL,
-                'td3' => ($td3) ? $td3 : NULL,
-                'td4' => ($td4) ? $td4 : NULL,
-                'td5' => ($td5) ? $td5 : NULL,
-                'status' => 1,
-                'educ_attainment' => ($req->educ_attainment) ? $req->educ_attainment : NULL,
-                'family_income' => ($req->family_income) ? $req->family_income : NULL,
-                'religion' => ($req->religion) ? $req->religion : NULL,
-                'ethnicity' => ($req->ethnicity) ? $req->ethnicity : NULL,
-                'sibling_rank' => ($req->sibling_rank) ? $req->sibling_rank : NULL,
-                'out_of' => ($req->out_of) ? $req->out_of : NULL,
+                'unique_id'             => $unique_id,
+                'referring_facility'    => ($user->facility_id) ? $user->facility_id : NULL,
+                'referred_by'           => ($user->id) ? $user->id : NULL,
+                'record_no'             => ($req->record_no) ? $req->record_no : NULL,
+                'referred_date'         => date('Y-m-d H:i:s'),
+                'referred_to'           => ($req->referred_facility) ? $req->referred_facility : NULL,
+                'department_id'         => ($req->referred_department) ? $req->referred_department : NULL,
+                'covid_number'          => $req->covid_number,
+                'health_worker'         => ($req->health_worker) ? $req->health_worker : NULL,
+                'patient_woman_id'      => $patient_id,
+                'gravidity'             => ($req->gravidity) ? $req->gravidity : NULL,
+                'parity'                => ($req->parity || $req->parity == 0) ? $req->parity : NULL,
+                'ftpal'                 => ($req->ftpal || $req->ftpal == 0) ? $req->ftpal : NULL,
+                'bmi'                   => ($req->bmi) ? $req->bmi : NULL,
+                'fundic_height'         => ($req->fundic_height) ? $req->fundic_height : NULL,
+                'hr'                    => ($req->hr) ? $req->hr : NULL,
+                'lmp'                   => ($lmp) ? $lmp : NULL,
+                'edc_edd'               => ($edc_edd) ? $edc_edd : NULL,
+                'height'                => ($req->height) ? $req->height : NULL,
+                'weigth'                => ($req->weigth) ? $req->weigth : NULL,
+                'bp'                    => ($req->bp) ? $req->bp : NULL,
+                'temp'                  => ($req->temp) ? $req->temp : NULL,
+                'rr'                    => ($req->rr) ? $req->rr : NULL,
+                'td1'                   => ($td1) ? $td1 : NULL,
+                'td2'                   => ($td2) ? $td2 : NULL,
+                'td3'                   => ($td3) ? $td3 : NULL,
+                'td4'                   => ($td4) ? $td4 : NULL,
+                'td5'                   => ($td5) ? $td5 : NULL,
+                'status'                => 1,
+                'educ_attainment'       => ($req->educ_attainment) ? $req->educ_attainment : NULL,
+                'family_income'         => ($req->family_income) ? $req->family_income : NULL,
+                'religion'              => ($req->religion) ? $req->religion : NULL,
+                'ethnicity'             => ($req->ethnicity) ? $req->ethnicity : NULL,
+                'sibling_rank'          => ($req->sibling_rank) ? $req->sibling_rank : NULL,
+                'out_of'                => ($req->out_of) ? $req->out_of : NULL,
             );
 
             $fac = Facility::find($user->facility_id);
@@ -848,43 +846,43 @@ class PatientCtrl extends Controller
             }
 
             $data1 = array(
-                'unique_id' => $unique_id,
-                'patient_woman_id' => $patient_id,
-                'hypertension' => ($req->hypertension) ? $req->hypertension : NULL,
-                'anemia' => ($req->anemia) ? $req->anemia : NULL,
-                'malaria' => ($req->malaria) ? $req->malaria : NULL,
-                'cancer' => ($req->cancer) ? $req->cancer : NULL,
-                'allergies' => ($req->allergies) ? $req->allergies : NULL,
-                'renal_disease' => ($req->renal_disease) ? $req->renal_disease : NULL,
-                'typhoid_disorders' => ($req->typhoid_disorders) ? $req->typhoid_disorders : NULL,
-                'hypo_hyper' => ($req->hypo_hyper) ? $req->hypo_hyper : NULL,
-                'tuberculosis' => ($req->tuberculosis) ? $req->tuberculosis : NULL,
-                'diabetes_mellitus' => ($req->diabetes_mellitus) ? $req->diabetes_mellitus : NULL,
-                'hepatatis_b' => ($req->hepatatis_b) ? $req->hepatatis_b : NULL,
-                'hiv_sti' => ($req->hiv_sti) ? $req->hiv_sti : NULL,
-                'seizure_disorder' => ($req->seizure_disorder) ? $req->seizure_disorder : NULL,
-                'cardiovascular_disease' => ($req->cardiovascular_disease) ? $req->cardiovascular_disease : NULL,
-                'malnutrition' => ($req->malnutrition) ? $req->malnutrition : NULL,
-                'hemotilgic_disorder' => ($req->hemotilgic_disorder) ? $req->hemotilgic_disorder : NULL,
-                'substance_abuse' => ($req->substance_abuse) ? $req->substance_abuse : NULL,
-                'anti_phospholipid' => ($req->anti_phospholipid) ? $req->anti_phospholipid : NULL,
-                'restrictive_pulmonary' => ($req->restrictive_pulmonary) ? $req->restrictive_pulmonary : NULL,
-                'mental_retardation' => ($req->mental_retardation) ? $req->mental_retardation : NULL,
-                'habitual_abortion' => ($req->habitual_abortion) ? $req->habitual_abortion : NULL,
-                'fetus_congenital' => ($req->fetus_congenital) ? $req->fetus_congenital : NULL,
-                'previous_caesarean' => ($req->previous_caesarean) ? $req->previous_caesarean : NULL,
-                'preterm_delivery' => ($req->preterm_delivery) ? $req->preterm_delivery : NULL,
-                'subjective' => ($req->ante_subjective) ? $req->ante_subjective : NULL,
-                'bp' => ($req->ante_bp) ? $req->ante_bp : NULL,
-                'temp' => ($req->ante_temp) ? $req->ante_temp : NULL,
-                'hr' => ($req->ante_hr) ? $req->ante_hr : NULL,
-                'rr' => ($req->ante_rr) ? $req->ante_rr : NULL,
-                'fh' => ($req->ante_fh) ? $req->ante_fh : NULL,
-                'fht' => ($req->ante_fht) ? $req->ante_fht : NULL,
-                'others' => ($req->others) ? $req->others : NULL,
-                'other_physical_exam' => ($req->ante_other_physical_exam) ? $req->ante_other_physical_exam : NULL,
-                'assessment_diagnosis' => ($req->ante_assessment_diagnosis) ? $req->ante_assessment_diagnosis : NULL,
-                'plan_intervention' => ($req->ante_plan_intervention) ? $req->ante_plan_intervention : NULL,
+                'unique_id'                 => $unique_id,
+                'patient_woman_id'          => $patient_id,
+                'hypertension'              => ($req->hypertension) ? $req->hypertension : NULL,
+                'anemia'                    => ($req->anemia) ? $req->anemia : NULL,
+                'malaria'                   => ($req->malaria) ? $req->malaria : NULL,
+                'cancer'                    => ($req->cancer) ? $req->cancer : NULL,
+                'allergies'                 => ($req->allergies) ? $req->allergies : NULL,
+                'renal_disease'             => ($req->renal_disease) ? $req->renal_disease : NULL,
+                'typhoid_disorders'         => ($req->typhoid_disorders) ? $req->typhoid_disorders : NULL,
+                'hypo_hyper'                => ($req->hypo_hyper) ? $req->hypo_hyper : NULL,
+                'tuberculosis'              => ($req->tuberculosis) ? $req->tuberculosis : NULL,
+                'diabetes_mellitus'         => ($req->diabetes_mellitus) ? $req->diabetes_mellitus : NULL,
+                'hepatatis_b'               => ($req->hepatatis_b) ? $req->hepatatis_b : NULL,
+                'hiv_sti'                   => ($req->hiv_sti) ? $req->hiv_sti : NULL,
+                'seizure_disorder'          => ($req->seizure_disorder) ? $req->seizure_disorder : NULL,
+                'cardiovascular_disease'    => ($req->cardiovascular_disease) ? $req->cardiovascular_disease : NULL,
+                'malnutrition'              => ($req->malnutrition) ? $req->malnutrition : NULL,
+                'hemotilgic_disorder'       => ($req->hemotilgic_disorder) ? $req->hemotilgic_disorder : NULL,
+                'substance_abuse'           => ($req->substance_abuse) ? $req->substance_abuse : NULL,
+                'anti_phospholipid'         => ($req->anti_phospholipid) ? $req->anti_phospholipid : NULL,
+                'restrictive_pulmonary'     => ($req->restrictive_pulmonary) ? $req->restrictive_pulmonary : NULL,
+                'mental_retardation'        => ($req->mental_retardation) ? $req->mental_retardation : NULL,
+                'habitual_abortion'         => ($req->habitual_abortion) ? $req->habitual_abortion : NULL,
+                'fetus_congenital'          => ($req->fetus_congenital) ? $req->fetus_congenital : NULL,
+                'previous_caesarean'        => ($req->previous_caesarean) ? $req->previous_caesarean : NULL,
+                'preterm_delivery'          => ($req->preterm_delivery) ? $req->preterm_delivery : NULL,
+                'subjective'                => ($req->ante_subjective) ? $req->ante_subjective : NULL,
+                'bp'                        => ($req->ante_bp) ? $req->ante_bp : NULL,
+                'temp'                      => ($req->ante_temp) ? $req->ante_temp : NULL,
+                'hr'                        => ($req->ante_hr) ? $req->ante_hr : NULL,
+                'rr'                        => ($req->ante_rr) ? $req->ante_rr : NULL,
+                'fh'                        => ($req->ante_fh) ? $req->ante_fh : NULL,
+                'fht'                       => ($req->ante_fht || $req->ante_fht == 0) ? $req->ante_fht : NULL,
+                'others'                    => ($req->others) ? $req->others : NULL,
+                'other_physical_exam'       => ($req->ante_other_physical_exam) ? $req->ante_other_physical_exam : NULL,
+                'assessment_diagnosis'      => ($req->ante_assessment_diagnosis) ? $req->ante_assessment_diagnosis : NULL,
+                'plan_intervention'         => ($req->ante_plan_intervention) ? $req->ante_plan_intervention : NULL,
             );
 
             $antepartum = Antepartum::Create($data1);
@@ -897,36 +895,36 @@ class PatientCtrl extends Controller
 
             $date_of_visit = date('Y-m-d', strtotime($req->date_of_visit));
             $data2 = array(
-                'unique_id' => $unique_id,
-                'patient_woman_id' => $patient_id,
-                'no_trimester' => ($req->no_trimester) ? $req->no_trimester : NULL,
-                'no_visit' => ($req->no_visit) ? $req->no_visit : NULL,
-                'date_of_visit' => ($date_of_visit) ? $date_of_visit : NULL,
-                'vaginal_spotting' => ($req->vaginal_spotting) ? $req->vaginal_spotting : NULL,
-                'severe_nausea' => ($req->severe_nausea) ? $req->severe_nausea : NULL,
-                'significant_decline' => ($req->significant_decline) ? $req->significant_decline : NULL,
-                'persistent_contractions' => ($req->persistent_contractions) ? $req->persistent_contractions : NULL,
-                'premature_rupture' => ($req->premature_rupture) ? $req->premature_rupture : NULL,
-                'fetal_pregnancy' => ($req->fetal_pregnancy) ? $req->fetal_pregnancy : NULL,
-                'severe_headache' => ($req->severe_headache) ? $req->severe_headache : NULL,
-                'abdominal_pain' => ($req->abdominal_pain) ? $req->abdominal_pain : NULL,
-                'edema_hands' => ($req->edema_hands) ? $req->edema_hands : NULL,
-                'fever_pallor' => ($req->fever_pallor) ? $req->fever_pallor : NULL,
-                'seizure_consciousness' => ($req->seizure_consciousness) ? $req->seizure_consciousness : NULL,
-                'difficulty_breathing' => ($req->difficulty_breathing) ? $req->difficulty_breathing : NULL,
-                'painful_urination' => ($req->painful_urination) ? $req->painful_urination : NULL,
-                'subjective' => ($req->sign_subjective) ? $req->sign_subjective : NULL,
-                'bp' => ($req->sign_bp) ? $req->sign_bp : NULL,
-                'temp' => ($req->sign_temp) ? $req->sign_temp : NULL,
-                'hr' => ($req->sign_hr) ? $req->sign_hr : NULL,
-                'rr' => ($req->sign_rr) ? $req->sign_rr : NULL,
-                'fh' => ($req->sign_fh) ? $req->sign_fh : NULL,
-                'fht' => ($req->sign_fht) ? $req->sign_fht : NULL,
-                'other_physical_exam' => ($req->sign_other_physical_exam) ? $req->sign_other_physical_exam : NULL,
-                'assessment_diagnosis' => ($req->sign_assessment_diagnosis) ? $req->sign_assessment_diagnosis : NULL,
-                'elevated_bp' => ($req->elevated_bp) ? $req->elevated_bp : NULL,
-                'plan_intervention' => ($req->sign_plan_intervention) ? $req->sign_plan_intervention : NULL,
-                'aog' => ($req->sign_aog) ? $req->sign_aog : NULL,
+                'unique_id'                 => $unique_id,
+                'patient_woman_id'          => $patient_id,
+                'no_trimester'              => ($req->no_trimester) ? $req->no_trimester : NULL,
+                'no_visit'                  => ($req->no_visit) ? $req->no_visit : NULL,
+                'date_of_visit'             => ($date_of_visit) ? $date_of_visit : NULL,
+                'vaginal_spotting'          => ($req->vaginal_spotting) ? $req->vaginal_spotting : NULL,
+                'severe_nausea'             => ($req->severe_nausea) ? $req->severe_nausea : NULL,
+                'significant_decline'       => ($req->significant_decline) ? $req->significant_decline : NULL,
+                'persistent_contractions'   => ($req->persistent_contractions) ? $req->persistent_contractions : NULL,
+                'premature_rupture'         => ($req->premature_rupture) ? $req->premature_rupture : NULL,
+                'fetal_pregnancy'           => ($req->fetal_pregnancy) ? $req->fetal_pregnancy : NULL,
+                'severe_headache'           => ($req->severe_headache) ? $req->severe_headache : NULL,
+                'abdominal_pain'            => ($req->abdominal_pain) ? $req->abdominal_pain : NULL,
+                'edema_hands'               => ($req->edema_hands) ? $req->edema_hands : NULL,
+                'fever_pallor'              => ($req->fever_pallor) ? $req->fever_pallor : NULL,
+                'seizure_consciousness'     => ($req->seizure_consciousness) ? $req->seizure_consciousness : NULL,
+                'difficulty_breathing'      => ($req->difficulty_breathing) ? $req->difficulty_breathing : NULL,
+                'painful_urination'         => ($req->painful_urination) ? $req->painful_urination : NULL,
+                'subjective'                => ($req->sign_subjective) ? $req->sign_subjective : NULL,
+                'bp'                        => ($req->sign_bp) ? $req->sign_bp : NULL,
+                'temp'                      => ($req->sign_temp) ? $req->sign_temp : NULL,
+                'hr'                        => ($req->sign_hr) ? $req->sign_hr : NULL,
+                'rr'                        => ($req->sign_rr) ? $req->sign_rr : NULL,
+                'fh'                        => ($req->sign_fh) ? $req->sign_fh : NULL,
+                'fht'                       => ($req->sign_fht) ? $req->sign_fht : NULL,
+                'other_physical_exam'       => ($req->sign_other_physical_exam) ? $req->sign_other_physical_exam : NULL,
+                'assessment_diagnosis'      => ($req->sign_assessment_diagnosis) ? $req->sign_assessment_diagnosis : NULL,
+                'elevated_bp'               => ($req->elevated_bp) ? $req->elevated_bp : NULL,
+                'plan_intervention'         => ($req->sign_plan_intervention) ? $req->sign_plan_intervention : NULL,
+                'aog'                       => ($req->sign_aog) ? $req->sign_aog : NULL,
             );
 
             $signsymptoms = SignSymptoms::Create($data2);
@@ -974,38 +972,38 @@ class PatientCtrl extends Controller
             // }
               
             $data4 = array(
-                'unique_id' => $unique_id,
-                'patient_woman_id' => $patient_id,
-                'bp_15' => ($req->bp_15) ? $req->bp_15 : NULL,
-                'bp_30' => ($req->bp_30) ? $req->bp_30 : NULL,
-                'bp_45' => ($req->bp_45) ? $req->bp_45 : NULL,
-                'bp_60' => ($req->bp_60) ? $req->bp_60 : NULL,
-                'bp_remarks' => ($req->bp_remarks) ? $req->bp_remarks : NULL,
-                'temp_15' => ($req->temp_15) ? $req->temp_15 : NULL,
-                'temp_30' => ($req->temp_30) ? $req->temp_30 : NULL,
-                'temp_45' => ($req->temp_45) ? $req->temp_45 : NULL,
-                'temp_60' => ($req->temp_60) ? $req->temp_60 : NULL,
-                'temp_remaks' => ($req->temp_remaks) ? $req->temp_remaks : NULL,
-                'hr_15' => ($req->hr_15) ? $req->hr_15 : NULL,
-                'hr_30' => ($req->hr_30) ? $req->hr_30 : NULL,
-                'hr_45' => ($req->hr_45) ? $req->hr_45 : NULL,
-                'hr_60' => ($req->hr_60) ? $req->hr_60 : NULL,
-                'hr_remarks' => ($req->hr_remarks) ? $req->hr_remarks : NULL,
-                'rr_15' => ($req->rr_15) ? $req->rr_15 : NULL,
-                'rr_30' => ($req->rr_30) ? $req->rr_30 : NULL,
-                'rr_45' => ($req->rr_45) ? $req->rr_45 : NULL,
-                'rr_60' => ($req->rr_60) ? $req->rr_60 : NULL,
-                'rr_remarks' => ($req->rr_remarks) ? $req->rr_remarks : NULL,
-                'o2sat_15' => ($req->o2sat_15) ? $req->o2sat_15 : NULL,
-                'o2sat_30' => ($req->o2sat_30) ? $req->o2sat_30 : NULL,
-                'o2sat_45' => ($req->o2sat_45) ? $req->o2sat_45 : NULL,
-                'o2sat_60' => ($req->o2sat_45) ? $req->o2sat_45 : NULL,
-                'o2sat_remaks' => ($req->o2sat_remaks) ? $req->o2sat_remaks : NULL,
-                'fht_15' => ($req->fht_15) ? $req->fht_15 : NULL,
-                'fht_30' => ($req->fht_30) ? $req->fht_30 : NULL,
-                'fht_45' => ($req->fht_45) ? $req->fht_45 : NULL,
-                'fht_60' => ($req->fht_60) ? $req->fht_60 : NULL,
-                'fht_remarks' => ($req->fht_remarks) ? $req->fht_remarks : NULL,
+                'unique_id'         => $unique_id,
+                'patient_woman_id'  => $patient_id,
+                'bp_15'             => ($req->bp_15) ? $req->bp_15 : NULL,
+                'bp_30'             => ($req->bp_30) ? $req->bp_30 : NULL,
+                'bp_45'             => ($req->bp_45) ? $req->bp_45 : NULL,
+                'bp_60'             => ($req->bp_60) ? $req->bp_60 : NULL,
+                'bp_remarks'        => ($req->bp_remarks) ? $req->bp_remarks : NULL,
+                'temp_15'           => ($req->temp_15) ? $req->temp_15 : NULL,
+                'temp_30'           => ($req->temp_30) ? $req->temp_30 : NULL,
+                'temp_45'           => ($req->temp_45) ? $req->temp_45 : NULL,
+                'temp_60'           => ($req->temp_60) ? $req->temp_60 : NULL,
+                'temp_remaks'       => ($req->temp_remaks) ? $req->temp_remaks : NULL,
+                'hr_15'             => ($req->hr_15) ? $req->hr_15 : NULL,
+                'hr_30'             => ($req->hr_30) ? $req->hr_30 : NULL,
+                'hr_45'             => ($req->hr_45) ? $req->hr_45 : NULL,
+                'hr_60'             => ($req->hr_60) ? $req->hr_60 : NULL,
+                'hr_remarks'        => ($req->hr_remarks) ? $req->hr_remarks : NULL,
+                'rr_15'             => ($req->rr_15) ? $req->rr_15 : NULL,
+                'rr_30'             => ($req->rr_30) ? $req->rr_30 : NULL,
+                'rr_45'             => ($req->rr_45) ? $req->rr_45 : NULL,
+                'rr_60'             => ($req->rr_60) ? $req->rr_60 : NULL,
+                'rr_remarks'        => ($req->rr_remarks) ? $req->rr_remarks : NULL,
+                'o2sat_15'          => ($req->o2sat_15) ? $req->o2sat_15 : NULL,
+                'o2sat_30'          => ($req->o2sat_30) ? $req->o2sat_30 : NULL,
+                'o2sat_45'          => ($req->o2sat_45) ? $req->o2sat_45 : NULL,
+                'o2sat_60'          => ($req->o2sat_45) ? $req->o2sat_45 : NULL,
+                'o2sat_remaks'      => ($req->o2sat_remaks) ? $req->o2sat_remaks : NULL,
+                'fht_15'            => ($req->fht_15) ? $req->fht_15 : NULL,
+                'fht_30'            => ($req->fht_30) ? $req->fht_30 : NULL,
+                'fht_45'            => ($req->fht_45) ? $req->fht_45 : NULL,
+                'fht_60'            => ($req->fht_60) ? $req->fht_60 : NULL,
+                'fht_remarks'       => ($req->fht_remarks) ? $req->fht_remarks : NULL,
             );
 
             $pregvitalsign = PregVitalSign::Create($data4);

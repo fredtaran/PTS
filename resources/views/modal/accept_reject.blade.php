@@ -169,7 +169,7 @@
             <form method="POST" class="form-submit" id="view_pregnant_form_new" >
                 <div class="jim-content">
                     @include('include.header_form')
-                    <div class="title-form">Risk Assessment Check list for Pregnant Women</div>
+                    <div class="title-form">Risk Assessment Check List for Pregnant Women</div>
                     
                     {{ csrf_field() }}
                     <input type="hidden" name="patient_id" class="patient_id" value="" />

@@ -6,45 +6,49 @@
         <?php $user = Auth::user();?>
         const db = getDatabase();
         const callRef = ref(db, 'Call');
+        const acceptRef = ref(db, 'Accept');
+        const rejectRef = ref(db, 'Reject');
+        const arriveRef = ref(db, 'Arrival');
+        const admitRef = ref(db, 'Admit');
+        const dischargeRef = ref(db, 'Discharge');
+        const transferRef = ref(db, 'Transfer');
+        const feedbackRef = ref(db, 'Feedback');
 
-        // var acceptRef = dbRef.ref('Accept');
-        // var rejectRef = dbRef.ref('Reject');
-        // var arriveRef = dbRef.ref('Arrival');
-        // var admitRef = dbRef.ref('Admit');
-        // var dischargeRef = dbRef.ref('Discharge');
-        // var transferRef = dbRef.ref('Transfer');
-        // var feedbackRef = dbRef.ref('Feedback');
+        // Notification when a patient is accepted
+        onChildAdded(acceptRef, (snapshot) => {
+            console.log("Accept");
+            console.log(snapshot.val());
+            var data = snapshot.val();
+            var action_md = data.action_md;
+            var facility_name = data.facility_name;
+            var patient_name = data.patient_name;
 
-        // acceptRef.on('child_added', function(snapshot) {
-        //     var data = snapshot.val();
-        //     var action_md = data.action_md;
-        //     var facility_name = data.facility_name;
-        //     var patient_name = data.patient_name;
+            var msg = patient_name + '  was accepted by Dr. ' + action_md + ' of ' + facility_name +
+            '<br />' + data.date;
 
-        //     var msg = patient_name + '  was accepted by Dr. ' + action_md + ' of ' + facility_name +
-        //     '<br />' + data.date;
+            var msg2 = patient_name + '  was accepted by Dr. ' + action_md + ' of ' + facility_name +
+            '\n' + data.date;
 
-        //     var msg2 = patient_name + '  was accepted by Dr. ' + action_md + ' of ' + facility_name +
-        //     '\n' + data.date;
+            verify(data.code, 'success', 'Accepted', msg, msg2);
+        });
 
-        //     verify(data.code, 'success', 'Accepted', msg, msg2);
-        // });
+        // Notification when a patient is rejected
+        onChildAdded(rejectRef, (snapshot) => {
+            var data = snapshot.val();
+            var patient_name = data.patient_name;
+            var action_md = data.action_md;
+            var old_facility = data.old_facility;
 
-        // rejectRef.on('child_added', function(snapshot) {
-        //     var data = snapshot.val();
-        //     var patient_name = data.patient_name;
-        //     var action_md = data.action_md;
-        //     var old_facility = data.old_facility;
+            var msg = 'Dr. ' + action_md + ' of ' + old_facility + ' recommended to redirect ' + patient_name + ' to other facility.' +
+            '<br />' + data.date;
 
-        //     var msg = 'Dr. ' + action_md + ' of ' + old_facility + ' recommended to redirect ' + patient_name + ' to other facility.' +
-        //     '<br />' + data.date;
+            var msg2 = 'Dr. ' + action_md + ' of ' + old_facility + ' recommended to redirect ' + patient_name + ' to other facility.' +
+            '\n' + data.date;
 
-        //     var msg2 = 'Dr. ' + action_md + ' of ' + old_facility + ' recommended to redirect ' + patient_name + ' to other facility.' +
-        //     '\n' + data.date;
+            verify(data.code, 'error', 'Redirected', msg, msg2);
+        });
 
-        //     verify(data.code, 'error', 'Redirected', msg, msg2);
-        // });
-
+        // Notification when a call is requested
         onChildAdded(callRef, (snapshot) => {
             var data = snapshot.val();
 
@@ -60,69 +64,73 @@
             verify(data.code, 'warning', 'Requesting a Call', msg, msg2);
         });
 
-        // arriveRef.on('child_added',function(snapshot) {
-        //     var data = snapshot.val();
-        //     console.log(data);
+        // Notification when a patient arrives
+        onChildAdded(arriveRef, (snapshot) => {
+            var data = snapshot.val();
 
-        //     var patient_name = data.patient_name;
-        //     var current_facility = data.current_facility;
+            var patient_name = data.patient_name;
+            var current_facility = data.current_facility;
 
-        //     var msg = patient_name + ' arrived at ' + current_facility +
-        //     '<br />' + data.date;
+            var msg = patient_name + ' arrived at ' + current_facility +
+            '<br />' + data.date;
 
-        //     var msg2 = patient_name + ' arrived at ' + current_facility +
-        //     '\n' + data.date;
+            var msg2 = patient_name + ' arrived at ' + current_facility +
+            '\n' + data.date;
 
-        //     verify(data.code, 'success', 'Arrived', msg, msg2);
-        // });
+            verify(data.code, 'success', 'Arrived', msg, msg2);
+        });
 
-        // admitRef.on('child_added', function(snapshot) {
-        //     var data = snapshot.val();
-        //     var patient_name = data.patient_name;
-        //     var current_facility = data.current_facility;
+        // Notification when a patient is admitted
+        onChildAdded(admitRef, (snapshot) => {
+            var data = snapshot.val();
+            var patient_name = data.patient_name;
+            var current_facility = data.current_facility;
 
-        //     var msg = patient_name + ' admitted at ' + current_facility +
-        //     '<br />' + data.date;
+            var msg = patient_name + ' admitted at ' + current_facility +
+            '<br />' + data.date;
 
-        //     var msg2 = patient_name + ' admitted at ' + current_facility +
-        //     '\n' + data.date;
+            var msg2 = patient_name + ' admitted at ' + current_facility +
+            '\n' + data.date;
 
-        //     verify(data.code, 'info', 'Admitted', msg, msg2);
-        // });
+            verify(data.code, 'info', 'Admitted', msg, msg2);
+        });
+        
+        // Notification when a patient is discharged
+        onChildAdded(dischargeRef, (snapshot) => {
+            var data = snapshot.val();
+            var date = data.date;
+            var patient_name = data.patient_name;
+            var current_facility = data.current_facility;
 
-        // dischargeRef.on('child_added', function(snapshot) {
-        //     var data = snapshot.val();
-        //     var date = data.date;
-        //     var patient_name = data.patient_name;
-        //     var current_facility = data.current_facility;
+            var msg = patient_name + ' discharged from ' + current_facility +
+            '<br />' + data.date;
 
-        //     var msg = patient_name + ' discharged from ' + current_facility +
-        //     '<br />' + data.date;
+            var msg2 = patient_name + ' discharged from ' + current_facility +
+            '\n' + data.date;
 
-        //     var msg2 = patient_name + ' discharged from ' + current_facility +
-        //     '\n' + data.date;
+            verify(data.code, 'info', 'Discharged', msg, msg2);
+        });
 
-        //     verify(data.code, 'info', 'Discharged', msg, msg2);
-        // });
+        // Notification when a patient is transferred
+        onChildAdded(transferRef, (snapshot) => {
+            var data = snapshot.val();
+            var date = data.date;
+            var patient_name = data.patient_name;
+            var action_md = data.action_md;
+            var old_facility = data.old_facility;
+            var new_facility = data.new_facility;
 
-        // transferRef.on('child_added', function(snapshot) {
-        //     var data = snapshot.val();
-        //     var date = data.date;
-        //     var patient_name = data.patient_name;
-        //     var action_md = data.action_md;
-        //     var old_facility = data.old_facility;
-        //     var new_facility = data.new_facility;
+            var msg = patient_name + '  was referred by Dr. ' + action_md + ' of ' + old_facility + ' to ' + new_facility +
+            '<br />' + data.date;
 
-        //     var msg = patient_name + '  was referred by Dr. ' + action_md + ' of ' + old_facility + ' to ' + new_facility +
-        //     '<br />' + data.date;
+            var msg2 = patient_name + '  was referred by Dr. ' + action_md + ' of ' + old_facility + ' to ' + new_facility +
+            '<br />' + data.date;
 
-        //     var msg2 = patient_name + '  was referred by Dr. ' + action_md + ' of ' + old_facility + ' to ' + new_facility +
-        //     '<br />' + data.date;
+            verify(data.code, 'warning', 'Transferred', msg, msg2);
+        });
 
-        //     verify(data.code,'warning','Transferred',msg,msg2);
-        // });
-
-        function lobibox(status, title, msg) {
+        // Lobibox function
+        function lobibox(status, title, msg, type) {
             Lobibox.notify(status, {
                 delay: false,
                 title: title,
@@ -130,38 +138,55 @@
                 img: "{{ url('img/logo.png') }}",
                 sound: false
             });
+
+            var audioElement2 = document.createElement('audio');
+            audioElement2.setAttribute('src', "{{ url('warning.wav') }}");
+            audioElement2.addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
+
+            audioElement2.play();
+
+            setTimeout(function() {
+                audioElement2.pause();
+                audioElement2.currentTime = 0;
+            }, 6000); // Play the warning.wav file twice (3 seconds each)
         }
 
-        function verify(code, status, title, msg, msg2) {
+        // Verify function
+        function verify(code, status, title, msg, msg2, type) {
             $.ajax({
                 url: "{{ url('doctor/verify/') }}/" + code,
                 type: "GET",
-                success: function(data){
+                success: function(data) {
+                    console.log(data);
                     if(data == 1) {
-                        lobibox(status, title, msg);
+                        lobibox(status, title, msg, type);
                         desktopNotification(title, msg2);
                     }
                 }
             });
         }
 
-        // feedbackRef.on('child_added', function(snapshot) {
-        //     var data = snapshot.val();
-        //     var doctor_name = $.ajax({
-        //         async: false,
-        //         url: "{{ url('doctor/name/') }}/" + data.user_id,
-        //         success: function(name) {
-        //             return name;
-        //         }
-        //     }).responseText;
+        // Notification when a feedback is given
+        onChildAdded(feedbackRef, (snapshot) => {
+            var data = snapshot.val();
+            var doctor_name = $.ajax({
+                async: false,
+                url: "{{ url('doctor/name/') }}/" + data.user_id,
+                success: function(name) {
+                    return name;
+                }
+            }).responseText;
 
-        //     var msg = "From: " + doctor_name + "<br>Code: " + data.code + "<br>Message: " + data.msg;
-        //     var msg2 = "From: " + doctor_name + "\nCode: " + data.code + "\nMessage: " + data.msg;
-        //     verify(data.code, 'Success', 'New Feedback', msg, msg2);
-        //     {{--if(data.user_id != "{{ $user->id }}"){--}}
-        //     {{----}}
-        //     {{--}--}}
-        // });
+            var msg = "From: " + doctor_name + "<br>Code: " + data.code + "<br>Message: " + data.msg;
+            var msg2 = "From: " + doctor_name + "\nCode: " + data.code + "\nMessage: " + data.msg;
+            verify(data.code, 'Success', 'New Feedback', msg, msg2);
+            {{--if(data.user_id != "{{ $user->id }}"){--}}
+            {{----}}
+            {{--}--}}
+        });
 
         var audioElement = document.createElement('audio');
         audioElement.setAttribute('src', "{{ url('dingdong.mp3') }}");
@@ -196,8 +221,8 @@
         var facility = "{{Auth::user()->facility_id}}";
         var user_id = "{{Auth::user()->id}}";
         var user_level = "{{Auth::user()->level}}";
-        var pusher = new Pusher('de3867e4200fc8aad0a6', {
-            cluster: 'ap1'
+        var pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
+            cluster: '{{ env("PUSHER_APP_CLUSTER") }}'
         });
 
         var channel = pusher.subscribe('preferred_channel');

@@ -79,7 +79,7 @@ class MonitoringCtrl extends Controller
 
         $data = Incident::select(
             'incident.*', 
-            DB::raw('CONCAT(patients.fname, " ", patients.mname, " ", patients.lname) as patient_name'),
+            DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
             DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
             'patients.sex',
             'patient_form.patient_id',
@@ -202,5 +202,23 @@ class MonitoringCtrl extends Controller
             "date_start" => $date_start,
             "date_end" => $date_end
         ]);
+    }
+
+    /**
+     * Incident log
+     */
+    public function IncidentLog($track_id)
+    {
+        $fac_id = Auth::user()->facility_id;
+        $incident = DB::connection('mysql')->select("call incident_log_chd10('$fac_id', '$track_id')");
+
+        $reported = count($incident);
+    
+        if($reported == 0) {
+            Session::put("no_reported",true);
+        }
+
+       
+        return $reported;
     }
 }

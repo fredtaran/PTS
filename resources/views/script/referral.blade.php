@@ -903,7 +903,6 @@ $('body').on('click', '.btn_call_request', function() {
             set(ref(db, 'Call/' + form_id), call_data);
 
             onChildAdded(ref(db, 'Call'), (snapshot) => {
-                console.log(snapshot.key)
                 setTimeout(() => {
                     remove(ref(db, 'Call/' + snapshot.key))
                     $('.loading').hide();
