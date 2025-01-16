@@ -31,7 +31,7 @@ if($searchKeyword){
                         </div>
 
                         <div class="col-md-4">
-                            <select name="facility_filter" class="select2">
+                            <select name="facility_filter" class="select2" class="form-control">
                                 <option value="">Select Facility</option>
                                 @foreach($facility as $row)
                                     <option value="{{ $row->id }}" <?php if($facility_filter == $row->id)echo 'selected'; ?>>{{ $row->name }}</option>
