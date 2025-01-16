@@ -70,7 +70,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
                 <select class="form-control select_muncity select2" name="muncity" required>
                     @if(isset($data->muncity))
                         @foreach(\App\Models\Muncity::where("province_id",$data->province)->get() as $row)
-                            <option value="{{ $row->id }}" <?php if($data->muncity == $row->id)echo 'selected'; ?> >{{ $row->description }}</option>
+                            <option value="{{ $row->id }}" <?php if($data->muncity == $row->id) echo 'selected'; ?> >{{ $row->description }}</option>
                         @endforeach
                     @else
                         <option value="">Select Municipality</option>
@@ -84,7 +84,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
                 <select class="form-control select_barangay select2" name="brgy" required>
                     @if(isset($data->brgy))
                         @foreach(\App\Models\Barangay::where("province_id",$data->province)->where("muncity_id",$data->muncity)->get() as $row)
-                            <option value="{{ $row->id }}" <?php if($data->brgy == $row->id)echo 'selected'; ?> >{{ $row->description }}</option>
+                            <option value="{{ $row->id }}" <?php if($data->brgy == $row->id) echo 'selected'; ?> >{{ $row->description }}</option>
                         @endforeach
                     @else
                         <option value="">Select Barangay</option>
@@ -266,7 +266,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="form-group">
                 <label>Hospital Status:</label>
                 <select class="form-control" name="status">
@@ -276,12 +276,23 @@ use Illuminate\Contracts\Encryption\DecryptException;
             </div>
         </div>
         
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="form-group">
                 <label>Vaccine Used:</label>
                 <select class="form-control" name="vaccine_used">
-                    <option value="no" <?php if(@$data->vaccine_used == 'no')echo 'selected'; ?>>No</option>
-                    <option value="yes" <?php if(@$data->vaccine_used == 'yes')echo 'selected'; ?>>Yes</option>
+                    <option value="no" <?php if(@$data->vaccine_used == 'no') echo 'selected'; ?>>No</option>
+                    <option value="yes" <?php if(@$data->vaccine_used == 'yes') echo 'selected'; ?>>Yes</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Referral Used</label>
+                <select class="form-control" name="referral_used" required>
+                    <option value="">Select Option</option>
+                    <option value="yes" <?php if(@$data->referral_used == 'yes') echo 'selected'; ?>>Yes</option>
+                    <option value="no" <?php if(@$data->referral_used == 'no') echo 'selected'; ?>>No</option>
                 </select>
             </div>
         </div>
@@ -299,17 +310,6 @@ use Illuminate\Contracts\Encryption\DecryptException;
                 </select>
             </div>
         </div> -->
-
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label>Referral Used</label>
-                <select class="form-control" name="referral_used" required>
-                    <option value="">Select Option</option>
-                    <option value="yes" <?php if(@$data->referral_used == 'yes')echo 'selected'; ?>>Yes</option>
-                    <option value="no" <?php if(@$data->referral_used == 'no')echo 'selected'; ?>>No</option>
-                </select>
-            </div>
-        </div>
     </div>
 
     <div class="row">
