@@ -1,5 +1,5 @@
 <div class="modal fade" role="dialog" id="facility_modal">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body facility_body">
                 <center>

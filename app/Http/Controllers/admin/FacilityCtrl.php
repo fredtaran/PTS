@@ -33,7 +33,7 @@ class FacilityCtrl extends Controller
             }
         }
 
-        Session::put('keyword',$keyword);
+        Session::put('keyword', $keyword);
 
         $data = Facility::select(
             "facility.id",

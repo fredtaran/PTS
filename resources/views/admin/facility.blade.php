@@ -7,7 +7,7 @@
                 <form action="{{ asset('admin/facility') }}" method="POST" class="form-inline">
                     {{ csrf_field() }}
                     <div class="form-group-lg" style="margin-bottom: 10px;">
-                        <input type="text" class="form-control" name="keyword" placeholder="Search name..." value="{{ Session::get("keyword") }}">
+                        <input type="text" class="form-control" name="keyword" placeholder="Search name..." value="{{ Session::get('keyword') }}">
                         <button type="submit" class="btn btn-success btn-sm btn-flat">
                             <i class="fa fa-search"></i> Search
                         </button>
@@ -124,8 +124,8 @@
     <script>
         $("#container").removeClass("container");
         $("#container").addClass("container-fluid");
-        <?php $user = Session::get('auth'); ?>
-        function FacilityBody(data){
+        <?php $user = Auth::user(); ?>
+        function FacilityBody(data) {
             var json;
             if(data == 'empty'){
                 json = {
@@ -138,7 +138,7 @@
                 };
             }
             var url = "<?php echo asset('admin/facility/body') ?>";
-            $.post(url,json,function(result){
+            $.post(url, json, function(result) {
                 $(".facility_body").html(result);
             })
         }
