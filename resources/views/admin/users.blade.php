@@ -148,7 +148,8 @@ if($searchKeyword){
                 title: "",
                 msg: "<?php echo Session::get('manage_user'); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             <?php
                 Session::put("manage_user", false);
