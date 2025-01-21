@@ -670,7 +670,7 @@ class ReferralCtrl extends Controller
         $step = 0;
 
         $seen = Tracking::where('code', $code)
-                        ->where('date_seen', '<>', '')
+                        ->whereNotNull('date_seen')
                         ->first();
 
         if(self::hasStatus('referred', $code))
