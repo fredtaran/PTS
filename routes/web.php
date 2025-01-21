@@ -74,6 +74,9 @@ Route::middleware(['auth'])->group(function() {
      * Doctor pages
      */
     Route::get('doctor', [App\Http\Controllers\doctor\HomeCtrl::class, 'index']);
+    Route::get('midwife', [App\Http\Controllers\doctor\HomeCtrl::class, 'index']);
+    Route::get('medical_dispatcher', [App\Http\Controllers\doctor\HomeCtrl::class, 'index']);
+    Route::get('nurse', [App\Http\Controllers\doctor\HomeCtrl::class, 'index']);
 
     /**
      * Doctor\PatientCtrl
