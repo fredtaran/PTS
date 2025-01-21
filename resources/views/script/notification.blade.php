@@ -130,7 +130,7 @@
         });
 
         // Lobibox function
-        function lobibox(status, title, msg, type) {
+        function lobibox(status, title, msg) {
             Lobibox.notify(status, {
                 delay: false,
                 title: title,
@@ -155,14 +155,14 @@
         }
 
         // Verify function
-        function verify(code, status, title, msg, msg2, type) {
+        function verify(code, status, title, msg, msg2) {
             $.ajax({
                 url: "{{ url('doctor/verify/') }}/" + code,
                 type: "GET",
                 success: function(data) {
                     console.log(data);
                     if(data == 1) {
-                        lobibox(status, title, msg, type);
+                        lobibox(status, title, msg);
                         desktopNotification(title, msg2);
                     }
                 }
