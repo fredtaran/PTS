@@ -22,7 +22,8 @@ class HomeCtrl extends Controller
             User::
             select(DB::raw("count(users.id) as y"), DB::raw("coalesce(department.description, 'NO DEPARTMENT') as label"))
                 ->leftJoin("department", "department.id", "=", "users.department_id")
-                ->where("users.level", "doctor")
+                ->where("users.level", "!=", "admin")
+                ->where("users.level", "!=", "support")
                 ->groupBy("users.department_id", "department.description")
                 ->get()
         :
@@ -30,7 +31,8 @@ class HomeCtrl extends Controller
             select(DB::raw("count(users.id) as y"), DB::raw("coalesce(department.description, 'NO DEPARTMENT') as label"))
                 ->leftJoin("department", "department.id", "=", "users.department_id")
                 ->where("users.facility_id", $user->facility_id)
-                ->where("users.level", "doctor")
+                ->where("users.level", "!=", "admin")
+                ->where("users.level", "!=", "support")
                 ->groupBy("users.department_id", "department.description")
                 ->get()
         ;

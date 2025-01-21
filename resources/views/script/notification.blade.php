@@ -219,7 +219,7 @@
             }, 5300);
         }
 
-        var facility = "{{Auth::user()->facility_id}}";
+        var facility = "{{ Auth::user()->facility_id }}";
         var user_id = "{{Auth::user()->id}}";
         var user_level = "{{Auth::user()->level}}";
         var pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
@@ -244,6 +244,7 @@
         var channel1 = pusher.subscribe('pregnant_channel');
         channel1.bind('pregnant_event', function(data) {
             $('#app_div').load(document.URL +  ' #app_div');
+            console.log("Pregnant Event");
             if(facility == data['referred_to']) {
                 if(data['status'] == 'highrisk') {
                     Lobibox.notify('error', {
@@ -254,7 +255,7 @@
                         sound: false,
                         delay: false
                     });
-                    play1();
+                    play();
                 } else if(data['status'] == 'moderate') {
                     Lobibox.notify('warning', {
                         title: "Moderate Pregnant Referral" ,
