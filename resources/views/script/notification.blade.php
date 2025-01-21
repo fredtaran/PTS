@@ -156,6 +156,7 @@
 
         // Verify function
         function verify(code, status, title, msg, msg2) {
+            console.log("verifying .......");
             $.ajax({
                 url: "{{ url('doctor/verify/') }}/" + code,
                 type: "GET",

@@ -1016,7 +1016,7 @@ class PatientCtrl extends Controller
 
             broadcast(new PregnantNotif($data, $fac, $referring_md, $fac_to, $status))->toOthers();
             
-            Session::put("refer_patient",true);
+            Session::put("refer_patient", true);
 
             return Redirect::back();
         }
