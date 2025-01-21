@@ -86,8 +86,8 @@ class PrintCtrl extends Controller
         $pdf->Ln();
         
         $pdf->MultiCell(0, 7, self::black($pdf, "I, _______________________________________ hereby give my consent to send or transmit my health data or"), 0, 'L');
-        $pdf->MultiCell(0, 7, self::black($pdf, "information to the Pregnancy Tracker and Referral System (PTRS) for the purpose of referring patients to other facilites"), 0, 'L');
-        $pdf->MultiCell(0, 7, self::black($pdf, "and/or the Department of Healths (DOHs) National Health Data Reporting Requirements."), 0, 'L');
+        $pdf->MultiCell(0, 7, self::black($pdf, "information to the Pregnancy Tracker and Referral System (PTRS) for the purpose of referring patients to other"), 0, 'L');
+        $pdf->MultiCell(0, 7, self::black($pdf, "facilites and/or the Department of Healths (DOHs) National Health Data Reporting Requirements."), 0, 'L');
         $pdf->Ln();
 
         $pdf->MultiCell(0, 7, self::black($pdf, "As such, I was made to understand that:"), 0, 'L');
