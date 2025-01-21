@@ -146,9 +146,9 @@ $status = Session::get('status');
                             <tr>
                                 <td>Patient Consent :</td>
                                 <td class="has-group">
-                                    <label style="cursor: pointer;"><input type="radio" name="consent" class="consent" value="Yes" required style="display:inline;"> <b>Yes</b>, I give my consent to transmit my health data to the E-Referral.</label>
+                                    <label style="cursor: pointer;"><input type="radio" name="consent" class="consent" value="Yes" required style="display:inline;"> <b>Yes</b>, I give my consent to transmit my health data to the Pregnancy Tracker and Referral System.</label>
                                     &nbsp;&nbsp;&nbsp;<br />
-                                    <label style="cursor: pointer;"><input type="radio" name="consent" class="consent" value="No" required> <b>No</b>, I don’t give my consent to transmit my health data to the E-Referral.</label>
+                                    <label style="cursor: pointer;"><input type="radio" name="consent" class="consent" value="No" required> <b>No</b>, I don’t give my consent to transmit my health data to the Pregnancy Tracker and Referral System.</label>
                                     <span class="span"></span><br>
                                     <a href="{{ asset('doctor/print/consent') }}" target="_blank">[Click here to view the Patient Consent Form] </a>
                                 </td>
