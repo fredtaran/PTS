@@ -83,7 +83,7 @@ class ParamCtrl extends Controller
         $tracking = Tracking::where('code', $code)->first();
 
         if($tracking) {
-            if($tracking->referred_from == $user->facility_id) {
+            if($tracking->referred_to == $user->facility_id) {
                 return 1;
             }
             return 0;
