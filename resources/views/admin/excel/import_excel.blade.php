@@ -27,7 +27,8 @@
             title: "",
             msg: "<?php echo Session::get("success"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         @endif
     </script>

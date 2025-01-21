@@ -92,7 +92,8 @@
             title: "",
             msg: "<?php echo Session::get("maincat_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("maincat",false);
@@ -105,7 +106,8 @@
             title: "",
             msg: "<?php echo Session::get("main_delete_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("main_delete",false);

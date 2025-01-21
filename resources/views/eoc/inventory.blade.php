@@ -104,7 +104,8 @@ $user = Session::get('auth');
             title: "",
             msg: "Successfully updated inventory!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php Session::put("inventory_update",false); ?>
         @endif

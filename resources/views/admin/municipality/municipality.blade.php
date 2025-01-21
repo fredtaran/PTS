@@ -138,7 +138,8 @@
             title: "",
             msg: "<?php echo Session::get("municipality_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         
         <?php

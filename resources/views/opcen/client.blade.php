@@ -220,6 +220,7 @@
             msg: "New client saved!",
             size: 'mini',
             rounded: true
+            sound: false
         });
         <?php Session::put("opcen", false); ?>
     @elseif(Session::get('addendum'))
@@ -227,7 +228,8 @@
             title: "",
             msg: "Successfully added addendum!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php Session::put("addendum", false); ?>
     @endif
@@ -317,7 +319,8 @@
     function actionInComplete() {
         Lobibox.notify('error', {
             title: 'Action In-Complete',
-            msg: "Sending SMS!"
+            msg: "Sending SMS!",
+            sound: false
         });
     }
 

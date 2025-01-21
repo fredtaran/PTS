@@ -663,7 +663,8 @@
                             title: "",
                             msg: title+" saved!",
                             size: 'mini',
-                            rounded: true
+                            rounded: true,
+                            sound: false
                         });
                     });
                 }

@@ -95,7 +95,8 @@
             title: "",
             msg: "Successfully added ramark!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php Session::put("add_remark",false); ?>
         @endif

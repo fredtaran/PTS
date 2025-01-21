@@ -433,7 +433,8 @@ $user = Session::get('auth');
                 title: '',
                 msg: "<?php echo session()->get('issueReferral'); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
         @endif
         @if(session()->has('transferReferral'))
@@ -441,7 +442,8 @@ $user = Session::get('auth');
             title: '',
             msg: "<?php echo session()->get('transferReferral'); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         @endif
 
@@ -465,7 +467,8 @@ $user = Session::get('auth');
             title: "",
             msg: "<?php echo Session::get("refer_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
     <?php
         Session::put("refer_update_save",false);
@@ -478,7 +481,8 @@ $user = Session::get('auth');
             title: "",
             msg: "<?php echo Session::get("upload_file_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
 
         $('#upload_modal').modal('show');

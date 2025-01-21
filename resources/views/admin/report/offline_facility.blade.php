@@ -176,7 +176,8 @@
                 title: "",
                 msg: "Successfully added offline remarks",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             <?php Session::put("add_offline_remark", false); ?>
         @endif

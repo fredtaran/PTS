@@ -654,7 +654,8 @@ $user = Auth::user();
                 title: '',
                 msg: "<?php echo session()->get('issueReferral'); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
         @endif
 
@@ -663,7 +664,8 @@ $user = Auth::user();
                 title: '',
                 msg: "<?php echo session()->get('transferReferral'); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
         @endif
 
@@ -687,7 +689,8 @@ $user = Auth::user();
                 title: "",
                 msg: "<?php echo Session::get("refer_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
 
             <?php
@@ -701,7 +704,8 @@ $user = Auth::user();
                 title: "",
                 msg: "File size should be 5MB below and PDF file only",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
 
             $('#upload_modal').modal('show');
@@ -728,7 +732,8 @@ $user = Auth::user();
                 title: "",
                 msg: "<?php echo Session::get("upload_file_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
 
             $('#upload_modal').modal('show');

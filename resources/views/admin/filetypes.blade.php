@@ -93,7 +93,8 @@
             title: "",
             msg: "<?php echo Session::get("types_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
             Session::put("types", false);

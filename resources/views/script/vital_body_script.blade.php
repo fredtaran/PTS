@@ -33,7 +33,8 @@ function removeId(vital_id){
             msg: message,
             sleep: 150000,
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         },
         error: function(){

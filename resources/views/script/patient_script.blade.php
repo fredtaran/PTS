@@ -62,7 +62,8 @@
                 title: "",
                 msg: "<?php echo Session::get("upload_file_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
 
             $('#upload_modal').modal('show');
@@ -1762,7 +1763,8 @@
                 title: "",
                 msg: "<?php echo Session::get("patient_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             <?php
                 Session::put("patient_update_save", false);
@@ -1775,7 +1777,8 @@
                 title: "",
                 msg: "<?php echo Session::get("remove_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             <?php
                 Session::put("remove_var", false);
@@ -1788,7 +1791,8 @@
                 title: "",
                 msg: "<?php echo Session::get("vital_update_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             $('#vital_modal').modal('show');
 
@@ -1812,7 +1816,8 @@
                 title: "",
                 msg: "<?php echo Session::get("vital_sign_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             $('#vital_modal').modal('show');
 
@@ -1836,7 +1841,8 @@
                 title: "",
                 msg: "<?php echo Session::get("physical_exam_message"); ?>",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             $('#vital_modal').modal('show');
 
@@ -1858,7 +1864,8 @@
         @if(Session::get('refer_patient'))
             Lobibox.notify('success', {
                 title: "Sucessfully",
-                msg: "Referred Patient!"
+                msg: "Referred Patient!",
+                sound: false
             });
             <?php
             Session::put("refer_patient", false);
@@ -1870,7 +1877,8 @@
                 title: "",
                 msg: "Successfully Added Information",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             <?php
                 Session::put("return_pregnant",false);

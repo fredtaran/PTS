@@ -96,7 +96,8 @@
             title: "",
             msg: "<?php echo Session::get("subcat_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("subcat",false);
@@ -109,7 +110,8 @@
             title: "",
             msg: "<?php echo Session::get("sub_delete_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("sub_delete",false);

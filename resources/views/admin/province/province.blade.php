@@ -95,7 +95,8 @@
             title: "",
             msg: "<?php echo Session::get("province_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("province",false);

@@ -1315,7 +1315,8 @@
             title: "",
             msg: "<?php echo Session::get("municipality_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("municipality",false);
@@ -1330,7 +1331,8 @@
         Lobibox.notify('success', {
             size: 'mini',
             rounded: true,
-            msg: 'Your vaccination record is successfully saved!'
+            msg: 'Your vaccination record is successfully saved!',
+            sound: false
         });
         @endif
 

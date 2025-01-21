@@ -72,7 +72,8 @@ $( ".delete_affiliated_btn" ).click(function() {
             title: "",
             msg: "Facility sucessfully added",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
     <?php
         Session::put("affi_add",false);
@@ -84,7 +85,8 @@ $( ".delete_affiliated_btn" ).click(function() {
             title: "",
             msg: "Facility deleted!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
     <?php
         Session::put("affi_delete",false);

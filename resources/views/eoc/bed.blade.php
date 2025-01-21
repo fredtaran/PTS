@@ -108,7 +108,8 @@
                 title: "",
                 msg: "Successfully added bed!",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
             <?php Session::put("bed",false); ?>
         @endif

@@ -167,7 +167,8 @@
             title: "",
             msg: "New call saved!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php Session::put("it_call", false); ?>
     @elseif(Session::get('it_addendum'))
@@ -175,7 +176,8 @@
             title: "",
             msg: "Successfully added addendum!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php Session::put("it_addendum", false); ?>
     @endif
@@ -270,7 +272,8 @@
     function actionInComplete() {
         Lobibox.notify('error', {
             title: 'Action In-Complete',
-            msg: "Sending SMS!"
+            msg: "Sending SMS!",
+            sound: false
         });
     }
 
@@ -371,7 +374,8 @@
         var patient_code = $("#patient_code_id").val();
         if(!patient_code) {
             Lobibox.alert("error", {
-                msg: "Please enter the patient code!"
+                msg: "Please enter the patient code!",
+                sound: false
             });
             
             return false;
@@ -384,7 +388,8 @@
         $.get(url, function(result) {
             if(result == 'not_found') {
                 Lobibox.alert("error", {
-                    msg: "Patient code not found!"
+                    msg: "Patient code not found!",
+                    sound: false
                 });
             } else {
                 $('#patient_code_dialog').modal('toggle');

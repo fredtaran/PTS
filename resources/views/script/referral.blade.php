@@ -580,7 +580,8 @@
                                         title: "",
                                         msg: "Successfully Accepted Patient",
                                         size: 'mini',
-                                        rounded: true
+                                        rounded: true,
+                                        sound: false
                                     });
                                 }
                             },

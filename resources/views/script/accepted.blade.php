@@ -1122,7 +1122,8 @@ import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://ww
                 title: "",
                 msg: "Successfully Added CSS",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
 
             <?php Session::put("cssAdd", false); ?>
@@ -1133,7 +1134,8 @@ import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://ww
                 title: "",
                 msg: "Successfully Added Information",
                 size: 'mini',
-                rounded: true
+                rounded: true,
+                sound: false
             });
 
             <?php Session::put("return_pregnant", false); ?>

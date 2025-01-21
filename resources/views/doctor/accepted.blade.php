@@ -318,7 +318,8 @@ $end = \Carbon\Carbon::parse($end)->format('m/d/Y');
             title: "",
             msg: "<?php echo Session::get("upload_file_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
 
         $('#upload_modal').modal('show');

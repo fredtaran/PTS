@@ -304,7 +304,8 @@ $user = Session::get('auth');
             title: "",
             msg: "<?php echo Session::get("incidentadd_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
     <?php
         Session::put("incidentadd",false);

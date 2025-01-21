@@ -234,7 +234,7 @@
                     msg: "From " + data['referring_facility_name'] + "To " + data['referred_to_name']  + " Referred by " + data['referring_md_name'],
                     img: "{{ url('img/logo.png') }}",
                     width: 450,
-                    sound: true,
+                    sound: false,
                     delay: false
                 });
             }
@@ -250,7 +250,7 @@
                         msg: "From: <b>" + data['referring_facility_name'] + "</><br> To: <b>" + data['referred_to_name']  + "</b><br> Referred by: " + data['referring_md_name'],
                         img: "{{ url('img/logo.png') }}",
                         width: 450,
-                        sound: true,
+                        sound: false,
                         delay: false
                     });
                     play1();
@@ -260,7 +260,7 @@
                         msg: "From: " + data['referring_facility_name'] + " To: " + data['referred_to_name']  + "<br> Referred by: " + data['referring_md_name'],
                         img: "{{ url('img/logo.png') }}",
                         width: 450,
-                        sound: true,
+                        sound: false,
                         delay: false
                     });
                     play();
@@ -270,7 +270,7 @@
                         msg: "From: " + data['referring_facility_name'] + " To: " + data['referred_to_name']  + "<br> Referred by: " + data['referring_md_name'],
                         img: "{{ url('img/logo.png') }}",
                         width: 450,
-                        sound: true,
+                        sound: false,
                         delay: false
                     });
                     play();
@@ -284,7 +284,7 @@
                         msg: "From: " + data['referring_facility_name'] + " To: " + data['referred_to_name']  + "<br> Referred by: " + data['referring_md_name'],
                         img: "{{ url('img/logo.png') }}",
                         width: 450,
-                        sound: true,
+                        sound: false,
                         delay: false
                     });
                     play1();
@@ -294,7 +294,7 @@
                         msg: "From: " + data['referring_facility_name'] + " To: " + data['referred_to_name']  + "<br> Referred by: " + data['referring_md_name'],
                         img: "{{ url('img/logo.png') }}",
                         width: 450,
-                        sound: true,
+                        sound: false,
                         delay: false
                     }); 
                     play();
@@ -304,7 +304,7 @@
                         msg: "From: " + data['referring_facility_name'] + " To: " + data['referred_to_name']  + "<br> Referred by: " + data['referring_md_name'],
                         img: "{{ url('img/logo.png') }}",
                         width: 450,
-                        sound: true,
+                        sound: false,
                         delay: false
                     });
                     play();

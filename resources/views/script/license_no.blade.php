@@ -65,7 +65,8 @@ else
             title: "",
             msg: "License number sucessfully saved!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
     <?php
         Session::put("license_no_saved",false);

@@ -95,7 +95,8 @@
             title: "",
             msg: "<?php echo Session::get("incidentadd_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
     <?php
         Session::put("incidentadd",false);
@@ -128,7 +129,8 @@
             title: "",
             msg: "Successfully added ramark!",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php Session::put("add_remark",false); ?>
         @endif

@@ -111,7 +111,8 @@
             title: "",
             msg: "<?php echo Session::get("diagnosis_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("diagnosis",false);
@@ -124,7 +125,8 @@
             title: "",
             msg: "<?php echo Session::get("diag_delete_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("diag_delete",false);

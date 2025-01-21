@@ -102,7 +102,8 @@
             title: "",
             msg: "<?php echo Session::get("barangay_message"); ?>",
             size: 'mini',
-            rounded: true
+            rounded: true,
+            sound: false
         });
         <?php
         Session::put("barangay",false);
