@@ -980,12 +980,12 @@ class ReferralCtrl extends Controller
             return 'denied';
         }
         
-        // Tracking::where('id', $track_id)
-        //     ->update([
-        //         'status' => 'accepted',
-        //         'action_md' => $user->id,
-        //         'date_accepted' => date('Y-m-d H:i:s')
-        //     ]);
+        Tracking::where('id', $track_id)
+            ->update([
+                'status' => 'accepted',
+                'action_md' => $user->id,
+                'date_accepted' => date('Y-m-d H:i:s')
+            ]);
 
         $track = Tracking::find($track_id);
 
@@ -1002,8 +1002,6 @@ class ReferralCtrl extends Controller
             'status_on_er' => isset($req->status_on_er) ? $req->status_on_er : "",
             'status' => $track->status
         );
-
-        dd($data);
 
         Activity::create($data);
 
