@@ -1,8 +1,8 @@
 <?php
-use App\Incident_type;
+use App\Models\Incident_type;
 $type = Incident_type::all();
 
-$user = Session::get('auth');
+$user = User::auth();
 ?>
     <style>
         .trackFontSize{
