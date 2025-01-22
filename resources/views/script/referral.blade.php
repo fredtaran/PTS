@@ -543,56 +543,56 @@
 
         $('body').on('submit', '#acceptForm', function(e) {
             e.preventDefault();
-            console.log("asd")
             $('.loading').show();
             var tracking_id = form_id; 
             var reason = $('.accept_remarks').val();
             var patient_code = code
-            $(this).ajaxSubmit({
-                url: "{{ url('doctor/referral/accept/') }}/" + tracking_id,
-                type: 'POST',
-                success: function (tracking_id) {
-                    if(tracking_id == 'denied') {
-                        window.location.reload(false);
-                    } else {
-                        $.ajax({
-                            url: "{{ url('doctor/referral/accept/incident/') }}/" + tracking_id,
-                            type: "GET",
-                            success: function(reported) {
-                                if(reported == 1) {
-                                    alert('Accepted patient more than in 30mins. Fillout Incident logs');
-                                    var json;
-                                    json = {
-                                        "referred_from" : referred_from,
-                                        "_token" : "<?php echo csrf_token()?>"
-                                    };
-                                    var url2 = "<?php echo asset('admin/incident/body') ?>";
+            console.log(tracking_id)
+            // $(this).ajaxSubmit({
+            //     url: "{{ url('doctor/referral/accept/') }}/" + tracking_id,
+            //     type: 'POST',
+            //     success: function (tracking_id) {
+            //         if(tracking_id == 'denied') {
+            //             window.location.reload(false);
+            //         } else {
+            //             $.ajax({
+            //                 url: "{{ url('doctor/referral/accept/incident/') }}/" + tracking_id,
+            //                 type: "GET",
+            //                 success: function(reported) {
+            //                     if(reported == 1) {
+            //                         alert('Accepted patient more than in 30mins. Fillout Incident logs');
+            //                         var json;
+            //                         json = {
+            //                             "referred_from" : referred_from,
+            //                             "_token" : "<?php echo csrf_token()?>"
+            //                         };
+            //                         var url2 = "<?php echo asset('admin/incident/body') ?>";
 
-                                    $.post(url2, json, function(result) {
-                                        $('.loading').hide();
-                                        $('input#patient_code').val(patient_code);
-                                        $('#incident').modal('show');
-                                        $(".inci_body").html(result);
-                                    })
-                                } else {
-                                    $('.loading').hide();
-                                    window.location.reload(false);
-                                    Lobibox.notify('success', {
-                                        title: "",
-                                        msg: "Successfully Accepted Patient",
-                                        size: 'mini',
-                                        rounded: true,
-                                        sound: false
-                                    });
-                                }
-                            },
-                            error: function(){
-                                $('#serverModal').modal();
-                            }
-                        });
-                    }
-                }
-            });
+            //                         $.post(url2, json, function(result) {
+            //                             $('.loading').hide();
+            //                             $('input#patient_code').val(patient_code);
+            //                             $('#incident').modal('show');
+            //                             $(".inci_body").html(result);
+            //                         })
+            //                     } else {
+            //                         $('.loading').hide();
+            //                         window.location.reload(false);
+            //                         Lobibox.notify('success', {
+            //                             title: "",
+            //                             msg: "Successfully Accepted Patient",
+            //                             size: 'mini',
+            //                             rounded: true,
+            //                             sound: false
+            //                         });
+            //                     }
+            //                 },
+            //                 error: function(){
+            //                     $('#serverModal').modal();
+            //                 }
+            //             });
+            //         }
+            //     }
+            // });
         });
         
         $('body').on('submit', '#referForm', function(e) {
