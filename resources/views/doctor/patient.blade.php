@@ -92,7 +92,7 @@
                             <a href="#patient_modal"
                                 data-toggle="modal"
                                 data-id = "{{ $row->patient_id }}"
-                                onclick="PatientBody('<?php echo $row->patient_id ?>')"
+                                click="PatientBody"
                                 class="update_info">
                                 {{ $row->lname }}, {{ $row->fname }} {{ $row->mname }}
                             </a>

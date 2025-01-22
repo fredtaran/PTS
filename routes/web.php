@@ -211,9 +211,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('admin/incident_type/body', [App\Http\Controllers\admin\FacilityCtrl::class, 'IncidentBody']);
     Route::post('admin/incident_type/add', [App\Http\Controllers\admin\FacilityCtrl::class, 'incidentAdd']);
     Route::post('admin/incident/body', [App\Http\Controllers\admin\FacilityCtrl::class, 'Incident']);
-    Route::post('admin/incident/addIncident','admin\FacilityCtrl@addIncident'); 
-    Route::get('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
-    Route::post('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
+    Route::post('admin/incident/addIncident', [App\Http\Controllers\admin\FacilityCtrl::class, 'addIncident']);
 
     // MUNICIPALITY/CITY
     Route::match(['GET','POST'], 'admin/municipality/{province_id}', [App\Http\Controllers\admin\FacilityCtrl::class, 'municipalityView']);
@@ -304,7 +302,8 @@ Route::middleware(['auth'])->group(function() {
     Route::get('monitoring/feedback/{code}','Monitoring\MonitoringCtrl@feedbackDOH');
     Route::get('doctor/referral/accept/incident/{track_id}', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'IncidentLog']);
     Route::get('doctor/report/incidentIndex', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'incidentIndex']);
-    Route::post('doctor/report/incidentIndex','Monitoring\MonitoringCtrl@incidentIndex');
+    Route::post('doctor/report/incidentIndex', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'incidentIndex']);
+    
 
     // reco to red monitoring
     Route::get('doctor/recotored', [App\Http\Controllers\Monitoring\MonitoringCtrl::class, 'recotoRed']);
@@ -448,6 +447,14 @@ Route::middleware(['auth'])->group(function() {
      * Change duty schedule
      */
     Route::get('duty/{option}', [App\Http\Controllers\UserCtrl::class, 'duty']);
+
+    /**
+     * CSS
+     */
+    //CSS
+    Route::get('admin/css', [App\Http\Controllers\doctor\CSSCtrl::class, 'index']);
+    Route::post('doctor/css', [App\Http\Controllers\doctor\CSSCtrl::class, 'css']);
+    Route::post('doctor/css_add', [App\Http\Controllers\doctor\CSSCtrl::class, 'cssAdd']);
 
 });
 

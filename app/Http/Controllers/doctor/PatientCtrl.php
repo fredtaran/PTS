@@ -463,7 +463,7 @@ class PatientCtrl extends Controller
                 ->where('tracking.referred_to', $user->facility_id);
 
         if($keyword) {
-            $data = $data->where(function($q) use ($keyword){
+            $data = $data->where(function($q) use ($keyword) {
                 $q->where('patients.fname', 'like', "%$keyword%")
                     ->orwhere('patients.mname', 'like', "%$keyword%")
                     ->orwhere('patients.lname', 'like', "%$keyword%")

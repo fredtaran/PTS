@@ -2,7 +2,7 @@
 use App\Models\Incident_type;
 $type = Incident_type::all();
 
-$user = User::auth();
+$user = Auth::user();
 ?>
     <style>
         .trackFontSize{
@@ -13,14 +13,14 @@ $user = User::auth();
             <tr>
             <input type="hidden" name="referred_from" value="@if(isset($referred_from)) {{$referred_from}} @endif" class="form-submit">
             <input type="hidden" name="referred_to" value="{{$user->facility_id}}" class="form-submit">
-                <input type = "hidden" value="{{$data->id}}" name="id">
+                <input type = "hidden" value="{{@$data->id}}" name="id">
                 <td class="col-sm-3"><label>Type of Incident</label></td>
                 <td class="col-sm-1">:</td>
                 <td class="col-sm-8">
                 <select name="type_id" class="chosen-select form-control" style="width: 100%;" required>
                     <option value="0">Select a type</option>
                     @foreach ($type as $ty)
-                    <option {{ ($data->type_id == $ty->id ? 'selected' : '') }} value="{{ $ty->id }}"> {{ $ty->type }}</option>
+                    <option {{ (@$data->type_id == $ty->id ? 'selected' : '') }} value="{{ $ty->id }}"> {{ $ty->type }}</option>
                     @endforeach
                 </select> 
                 </td>

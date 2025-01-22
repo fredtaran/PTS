@@ -215,7 +215,7 @@ class MonitoringCtrl extends Controller
         $reported = count($incident);
     
         if($reported == 0) {
-            Session::put("no_reported",true);
+            Session::put("no_reported", true);
         }
 
        

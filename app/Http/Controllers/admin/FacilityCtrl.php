@@ -386,4 +386,23 @@ class FacilityCtrl extends Controller
             'referred_from' => $referred_from
         ]);
     }
+
+    /**
+     * Add incident
+     */
+    public function addIncident(Request $req)
+    {
+        $data = $req->all();
+        if(isset($req->id)) {
+            $data = Incident::find($req->id)->update($data);
+            Session::put('incidentadd_message', 'Successfully updated incident');
+            Session::put('incidentadd', true);
+        } else {
+            Incident::create($data);
+            Session::put('incidentadd_message', 'Successfully added incident');
+            Session::put('incidentadd', true);
+        }
+
+        return Redirect::back();
+    }
 }

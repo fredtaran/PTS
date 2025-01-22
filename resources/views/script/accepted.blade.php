@@ -1104,7 +1104,7 @@ import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://ww
             });
         }
 
-        $('.css_btn').on('click',function(){
+        $('.css_btn').on('click', function() {
             var code = $(this).data('code');
             var url = "<?php echo asset('doctor/css'); ?>";
             var json = {

@@ -820,7 +820,8 @@
             });
         }
 
-        function PatientBody(patient_id) {
+        $('a[click="PatientBody"]').on('click', function() {
+            patient_id = $(this).attr('data-id');
             var url = "<?php echo asset('doctor/patient/update'); ?>";
             var json = {
                 "patient_id" : patient_id,
@@ -830,7 +831,7 @@
             $.post(url,json,function(result){
                 $(".patient_body").html(result);
             });
-        }
+        })
 
         $(".select2").select2({ width: '100%' });
         var referred_facility = 0;
