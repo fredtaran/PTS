@@ -40,12 +40,12 @@ class ReferralCtrl extends Controller
         $user = Auth::user();
         $data = Tracking::select(
                     'tracking.*', 
-                    DB::raw('CONCAT(patients.fname, IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
+                    DB::raw('CONCAT(patients.fname, " ", IFNULL(CONCAT(patients.mname, " "), " "), patients.lname) as patient_name'),
                     DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
                     'patients.sex',
                     'facility.name as facility_name',
-                    DB::raw('CONCAT(if(users.level = "doctor", "Dr. ", ""), users.fname, IFNULL(CONCAT(users.mname, " "), ""), users.lname) as referring_md'),
-                    DB::raw('CONCAT(action.fname, IFNULL(CONCAT(action.mname, " "), ""), action.lname) as action_md')
+                    DB::raw('CONCAT(if(users.level = "doctor", "Dr. ", ""), users.fname, " ", IFNULL(CONCAT(users.mname, " "), ""), users.lname) as referring_md'),
+                    DB::raw('CONCAT(action.fname, " ", IFNULL(CONCAT(action.mname, " "), ""), action.lname) as action_md')
                 )
                 ->join('patients', 'patients.id', '=', 'tracking.patient_id')
                 ->join('facility', 'facility.id', '=', 'tracking.referred_from')
