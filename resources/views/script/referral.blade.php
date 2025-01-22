@@ -547,7 +547,7 @@
             var tracking_id = form_id; 
             var reason = $('.accept_remarks').val();
             var patient_code = code
-            console.log(this)
+            console.log(tracking_id)
             // $(this).ajaxSubmit({
             //     url: "{{ url('doctor/referral/accept/') }}/" + tracking_id,
             //     type: 'POST',
