@@ -987,6 +987,8 @@ class ReferralCtrl extends Controller
         //         'date_accepted' => date('Y-m-d H:i:s')
         //     ]);
 
+        $track = Tracking::find($track_id);
+
         $data = array(
             'code' => $track->code,
             'patient_id' => $track->patient_id,
