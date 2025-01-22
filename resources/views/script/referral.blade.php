@@ -551,6 +551,7 @@
                 url: "{{ url('doctor/referral/accept/') }}/" + tracking_id,
                 type: 'POST',
                 success: function (tracking_id) {
+                    console.log(tracking_id)
                     if(tracking_id == 'denied') {
                         window.location.reload(false);
                     } else {
