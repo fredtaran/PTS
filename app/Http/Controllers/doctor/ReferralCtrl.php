@@ -975,6 +975,7 @@ class ReferralCtrl extends Controller
         $user = Auth::user();
 
         $track = Tracking::find($track_id);
+        dd($track);
         if($track->status == 'accepted' || $track->status == 'rejected') {
             Session::put('incoming_denied', true);
             return 'denied';
