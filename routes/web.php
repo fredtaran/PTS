@@ -453,10 +453,15 @@ Route::middleware(['auth'])->group(function() {
     /**
      * CSS
      */
-    //CSS
     Route::get('admin/css', [App\Http\Controllers\doctor\CSSCtrl::class, 'index']);
     Route::post('doctor/css', [App\Http\Controllers\doctor\CSSCtrl::class, 'css']);
     Route::post('doctor/css_add', [App\Http\Controllers\doctor\CSSCtrl::class, 'cssAdd']);
 
+    /**
+     * support\ReportCtrl
+     */
+    Route::get('support/report/users', [App\Http\Controllers\support\ReportCtrl::class, 'users']);
+    Route::post('support/report/users', [App\Http\Controllers\support\ReportCtrl::class, 'usersFilter']);
+    Route::get('support/report/users/export', [App\Http\Controllers\support\ExportCtrl::class, 'dailyUsers']);
 });
 
