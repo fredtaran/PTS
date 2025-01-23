@@ -52,7 +52,10 @@
 </script>
 
 {{--Normal and Pregnant Form--}}
-<script>
+<script type="module">
+    import { app } from '{{ asset("js/firebase.js") }}'
+    import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
+    
     $(document).ready(function() {
         $(".lmp_date").inputmask("mm/dd/yyyy");
         $(".edc_edd").inputmask("mm/dd/yyyy");
@@ -109,6 +112,25 @@
     });
 
     function getPregnantFormv2() {
+        var referring_facility_name;
+        var patient_id;
+        var name;
+        var patient_name;
+        var sex;
+        var age;
+        var civil_status;
+        var phic_status;
+        var phic_id;
+        var address;
+        var contact;
+        var dob;
+        var religion;
+        var ethnicity;
+        var sibling_rank;
+        var out_of;
+        var educ_attainment;
+        var family_income;
+
         $.ajax({
             url: "{{ url('doctor/referral/data/pregnantv2') }}/" + form_id,
             type: "GET",
@@ -127,7 +149,6 @@
                 patient_address += (form.patient_province) ? form.patient_province : '';
 
                 referring_facility_name = form.referring_facility_name;
-
                 patient_id = form.id;
                 name = form.woman_name;
                 patient_name = form.woman_name;
@@ -551,7 +572,6 @@
                 url: "{{ url('doctor/referral/accept/') }}/" + tracking_id,
                 type: 'POST',
                 success: function (tracking_id) {
-                    console.log(tracking_id)
                     if(tracking_id == 'denied') {
                         window.location.reload(false);
                     } else {
@@ -598,10 +618,12 @@
         $('body').on('submit', '#referForm', function(e) {
             e.preventDefault();
             $('.loading').show();
-            referred_to = $('.new_facility').val();
+            var referred_to = $('.new_facility').val();
             var old_facility = "{{ \App\Models\Facility::find($user->facility_id)?->name }}";
             var reason = $('.reject_reason').val();
-            referring_name = old_facility;
+            var referring_name = old_facility;
+
+            const db = getDatabase()
 
             $(this).ajaxSubmit({
                 url: "{{ url('doctor/referral/reject/') }}/" + form_id,
@@ -610,8 +632,8 @@
                     if(tracking_id == 'denied') {
                         window.location.reload(false);
                     } else {
-                        var rejectRef = dbRef.ref('Reject');
-                        rejectRef.push({
+                        var rejectRef = ref(db, 'Reject');
+                        var rejectData = {
                             date: getDateReferred(),
                             item: form_id,
                             activity_id: tracking_id,
@@ -621,14 +643,16 @@
                             code: code,
                             reason: reason,
                             referred_from: referred_from
-                        });
+                        }
 
-                        rejectRef.on('child_added', function(data) {
+                        set(ref(db, 'Reject/' + tracking_id), rejectData);
+
+                        onChildAdded(rejectRef, (snapshot) => {
                             setTimeout(function() {
-                                rejectRef.child(data.key).remove();
+                                remove(ref(db, 'Reject/' + snapshot.key))
                                 window.location.reload(false);
                             }, 500);
-                        });
+                        })
                     }
                 },
                 error: function() {
@@ -837,43 +861,49 @@
 </script>
 
 {{--Firebase On Child Added in Seen, Reject and Accept--}}
-<script>
-    // var accepts = dbRef.ref('Accept');
-    // var rejects = dbRef.ref('Reject');
-    // var seen = dbRef.ref('Seen');
-    // accepts.on('child_added', function(snapshot) {
-    //     var data = snapshot.val();
-    //     var form = $('#item-' + data.item).parent();
-    //     var content = '<i class="fa fa-user-plus bg-olive"></i>\n' +
-    //         '<div class="timeline-item">\n' +
-    //         '    <span class="time"><i class="fa fa-user-plus"></i> ' + data.date + '</span>\n' +
-    //         '    <h3 class="timeline-header no-border"><a href="#">' + data.patient_name + '</a> was ACCEPTED by <span class="text-success">Dr. ' + data.action_md + '</span></h3>\n' +
-    //         '\n' +
-    //         '</div>';
-    //     form.html(content);
-    // });
+<script type="module">
+    import { app } from '{{ asset("js/firebase.js") }}'
+    import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
 
-    // rejects.on('child_added', function(snapshot) {
-    //     var data = snapshot.val();
-    //     var form = $('#item-' + data.item).parent();
-    //     var content = '<i class="fa fa-user-times bg-maroon"></i>\n' +
-    //         '<div class="timeline-item">\n' +
-    //         '    <span class="time"><i class="fa fa-calendar"></i> ' + data.date + '</span>\n' +
-    //         '    <h3 class="timeline-header no-border"><a href="#">' + data.patient_name + '</a> RECOMMENDED TO REDIRECT to other facility by <span class="text-danger">Dr. ' + data.action_md + '</span></h3>\n' +
-    //         '\n' +
-    //         '</div>';
-    //     form.html(content);
-    // });
+    const db = getDatabase();
 
-    // seen.on('child_added', function(snapshot) {
-    //     var data = snapshot.val();
-    //     var item = '#item-' + data.item;
-    //     var date = data.date;
+    var accepts = ref(db, 'Accept');
+    var rejects = ref(db, 'Reject');
+    var seen = ref(db, 'Seen');
 
-    //     $(item).removeClass('pregnant-section normal-section').addClass('read-section');
-    //     $(item).find('.icon').removeClass('fa-ambulance').addClass('fa-eye');
-    //     $(item).find('.date_activity').html(date);
-    // });
+    onChildAdded(accepts, (snapshot) => {
+        var data = snapshot.val();
+        var form = $('#item-' + data.item).parent();
+        var content = '<i class="fa fa-user-plus bg-olive"></i>\n' +
+            '<div class="timeline-item">\n' +
+            '    <span class="time"><i class="fa fa-user-plus"></i> ' + data.date + '</span>\n' +
+            '    <h3 class="timeline-header no-border"><a href="#">' + data.patient_name + '</a> was ACCEPTED by <span class="text-success">Dr. ' + data.action_md + '</span></h3>\n' +
+            '\n' +
+            '</div>';
+        form.html(content);
+    })
+
+    onChildAdded(rejects, (snapshot) => {
+        var data = snapshot.val();
+        var form = $('#item-' + data.item).parent();
+        var content = '<i class="fa fa-user-times bg-maroon"></i>\n' +
+            '<div class="timeline-item">\n' +
+            '    <span class="time"><i class="fa fa-calendar"></i> ' + data.date + '</span>\n' +
+            '    <h3 class="timeline-header no-border"><a href="#">' + data.patient_name + '</a> RECOMMENDED TO REDIRECT to other facility by <span class="text-danger">Dr. ' + data.action_md + '</span></h3>\n' +
+            '\n' +
+            '</div>';
+        form.html(content);
+    })
+
+    onChildAdded(seen, (snapshot) => {
+        var data = snapshot.val();
+        var item = '#item-' + data.item;
+        var date = data.date;
+
+        $(item).removeClass('pregnant-section normal-section').addClass('read-section');
+        $(item).find('.icon').removeClass('fa-ambulance').addClass('fa-eye');
+        $(item).find('.date_activity').html(date);
+    })
 </script>
 
 {{--when call button is click--}}

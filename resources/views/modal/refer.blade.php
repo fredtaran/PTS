@@ -1,9 +1,10 @@
 <?php
     $user = Auth::user();
-    $facilities = \App\Models\Facility::select('id','name')
+    $facilities = \App\Models\Facility::select('id', 'name')
                                         ->where('province', $user->province)
                                         ->where('status', 1)
                                         ->where('referral_used', 'yes')
+                                        ->where('id', '!=', $user->facility_id) // exclude the facility from the referring choices
                                         ->orderBy('name', 'asc')
                                         ->get();
 ?>

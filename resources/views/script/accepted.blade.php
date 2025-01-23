@@ -1,6 +1,6 @@
 <script type="module">
-import { app } from '{{ asset("js/firebase.js") }}'
-import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
+    import { app } from '{{ asset("js/firebase.js") }}'
+    import { getDatabase, ref, onValue, onChildAdded, set, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
 
     $(document).ready(function() {
         var multipleCancelButton = new Choices('#choices-multiple-remove-button', {

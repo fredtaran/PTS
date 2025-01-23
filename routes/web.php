@@ -442,6 +442,8 @@ Route::middleware(['auth'])->group(function() {
     Route::post('doctor/referral/arrive/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'arrive']); //if patient is arrived
     Route::post('doctor/referral/admit/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'admit']); //if patient is admitted
     Route::post('doctor/referral/archive/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'archive']); //if patient is archived
+    Route::post('doctor/referral/reject/{track_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'reject']); //if form is rejected
+    Route::post('doctor/referral/redirect/{activity_id}', [App\Http\Controllers\doctor\ReferralCtrl::class, 'redirect']); //if patient is redirected to other facility
 
     /**
      * Change duty schedule

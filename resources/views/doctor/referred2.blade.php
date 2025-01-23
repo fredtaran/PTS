@@ -75,7 +75,7 @@ $user = Auth::user();
     $activities = \App\Models\Activity::select(
                     'activity.*',
                     DB::raw('CONCAT(users.fname, " ", IFNULL(CONCAT(u.mname, " "), " "), users.lname) as md_name'),
-                    DB::raw('CONCAT(u.fname, " ", IFNULL(CONCAT(u.mname, " "), ""), " ", u.lname) as referring_md'),
+                    DB::raw('CONCAT(u.fname, " ", IFNULL(CONCAT(u.mname, " "), " "), u.lname) as referring_md'),
                     'users.contact',
                     'fac_rejected.name as fac_rejected',
                     'referring_md as referring_md_id',
@@ -250,7 +250,7 @@ $user = Auth::user();
                                 <span class="txtDoctor">Dr. {{ $act->md_name }}</span> of <span class="txtHospital">{{ $act->fac_rejected }}</span> recommended to redirect <span class="txtPatient">{{ $act_name->fname }} {{ $act_name->mname }} {{ $act_name->lname }}</span> to other facility.
                                 <span class="remarks">Remarks: {{ $act->remarks }}</span>
                                 <br />
-                                @if($act->department_id == 0 && $user->facility_id == $act->referred_from)
+                                @if($user->facility_id == $act->referred_from)
                                     <button class="btn btn-success btn-xs btn-referred" data-toggle="modal" data-target="#referredFormModal" data-activity_id="{{ $act->id }}">
                                         <i class="fa fa-ambulance"></i> Refer to other facility
                                     </button>

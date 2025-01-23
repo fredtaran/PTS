@@ -12,7 +12,7 @@
                    data-id="{{ $row->id }}"
                    data-referred_from="{{ $row->referred_from }}"
                    data-backdrop="static">
-                    <i class="fa fa-folder"></i> View Form
+                    <i class="fa fa-folder"></i> View Form 
                 </a>
             </div>
         @endif

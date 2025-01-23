@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Activity;
 use App\Models\Facility;
 use App\Models\Feedback;
+use App\Models\Patients;
 use App\Models\Tracking;
 use App\Models\LabResult;
 use App\Models\Antepartum;
@@ -15,6 +16,7 @@ use App\Models\PregOutcome;
 use App\Models\PregnantForm;
 use App\Models\SignSymptoms;
 use Illuminate\Http\Request;
+use App\Events\PregnantNotif;
 use App\Models\PregVitalSign;
 use App\Models\PregnantFormv2;
 use Illuminate\Support\Facades\DB;
@@ -1143,5 +1145,139 @@ class ReferralCtrl extends Controller
                 ]);
 
         return date('M d, Y h:i A', strtotime($date));
+    }
+
+    /**
+     * Reject patient
+     */
+    public function reject(Request $req, $track_id)
+    {
+        $user = Auth::user();
+        $track = Tracking::find($track_id);
+
+        if($track->status == 'accepted' || $track->status == 'rejected') {
+            return 'denied';
+        }
+
+        Tracking::where('id', $track_id)
+            ->update([
+                'status' => 'rejected',
+                'action_md' => $user->id
+            ]);
+        $track = Tracking::find($track_id);
+        $act = Activity::where('code', $track->code)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $data = array(
+            'code' => $track->code,
+            'patient_id' => $track->patient_id,
+            'date_referred' => date('Y-m-d H:i:s'),
+            'referred_from' => $act->referred_from,
+            'referred_to' => $user->facility_id,
+            'action_md' => $user->id,
+            'department_id' => $track->department_id,
+            'referring_md' => $track->referring_md,
+            'remarks' => $req->remarks,
+            'status' => $track->status
+        );
+
+        $act = Activity::create($data);
+
+        return $act->id;
+    }
+
+    /**
+     * Redirect patient
+     */
+    public function redirect(Request $req, $activity_id)
+    {
+        $user = Auth::user();
+        $date = date('Y-m-d H:i:s');
+
+        Activity::where('id', $activity_id)
+            ->update([
+                'referred_to' => $user->facility_id,
+                'department_id' => 1
+            ]);
+
+        $track = Activity::select('activity.*', 'tracking.type', 'tracking.form_id')
+                ->join('tracking', 'tracking.code', '=', 'activity.code')
+                ->where('activity.id', $activity_id)
+                ->first();
+
+        $data = array(
+            'code' => $track->code,
+            'patient_id' => $track->patient_id,
+            'date_referred' => $date,
+            'referred_from' => $track->referred_to,
+            'referred_to' => $req->facility,
+            'action_md' => $user->id,
+            'department_id' => $track->department_id,
+            'referring_md' => $user->id,
+            'remarks' => '',
+            'status' => 'redirected'
+        );
+
+        $activity = Activity::create($data);
+
+        $tracking = Tracking::where('code', $track->code)
+            ->where('referred_from', $user->facility_id)
+            ->first();
+
+        if($tracking){
+            $tracking->update([
+                'date_referred' => $date,
+                'department_id' => $req->department,
+                'date_arrived' => NULL,
+                'date_seen' => NULL,
+                'referred_from' => $track->referred_to,
+                'referred_to' => $req->facility,
+                'remarks' => '',
+                'referring_md' => $user->id,
+                'status' => 'referred'
+            ]);
+        }
+
+        $patient = Patients::select(
+            DB::raw("TIMESTAMPDIFF(YEAR, patients.dob, CURDATE()) AS age"),
+            'patients.sex',
+            DB::raw('CONCAT(fname, " ", IFNULL(CONCAT(mname, " "), " "), lname) as patient_name')
+        )
+            ->where('id', $track->patient_id)
+            ->first();
+        $user_md = User::find($user->id);
+
+        $form_type = '#normalFormModal';
+        if($track->type == 'pregnant') {
+            $form_type = '#pregnantFormModal';
+            $status = 'pregnant';
+        }
+
+        $fac = Facility::find($user->facility_id);
+        $referring_md = User::find($user->id);
+        $fac_to = Facility::find($req->facility);
+        $status = $req->pregnant_status;
+
+        $data = array(
+            'referring_facility' => $track->referred_to,
+            'referred_to' => $req->facility,
+        );
+
+        event(new PregnantNotif($data, $fac, $referring_md, $fac_to, $status));
+
+        return array(
+            'code' => $track->code,
+            'date' => date('M d, Y h:i A', strtotime($date)),
+            'patient_name' => $patient->patient_name,
+            'status' => $status,
+            'age' => $patient->age,
+            'sex' => $patient->sex,
+            'action_md' => "$user_md->fname $user_md->mname $user_md->lname",
+            'form_type' => $form_type,
+            'track_id' => $tracking->id,
+            'activity_id' => $activity->id,
+            'referred_facility' => Facility::find($req->facility)->name
+        );
     }
 }

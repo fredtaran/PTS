@@ -13,7 +13,7 @@
         const admitRef = ref(db, 'Admit');
         const dischargeRef = ref(db, 'Discharge');
         const referredRef = ref(db, 'Referred');
-        var myfacility_name = {{ $user->facility_id }} == 0 ? 'DOH CHD-NM' : {{ \App\Models\Facility::find(0)?->name->first()->name }} + "";
+        var myfacility_name = {{ $user->facility_id }} == 0 ? 'DOH CHD-NM' : '{{ \App\Models\Facility::find($user->facility_id)->name }}';
 
         onChildAdded(seenRef, (snapshot) => {
                 var data = snapshot.val();
@@ -236,10 +236,12 @@
 
 {{--script for refer to other facility--}}
 <script type="module">
-import { app } from '{{ asset("js/firebase.js") }}'
-import { getDatabase, ref, set, onValue, onChildAdded, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
+    import { app } from '{{ asset("js/firebase.js") }}'
+    import { getDatabase, ref, set, onValue, onChildAdded, remove } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js'
 
     $(document).ready(function() {
+        <?php $user = Auth::user(); ?>
+        var myfacility_name = {{ $user->facility_id }} == 0 ? 'DOH CHD-NM' : '{{ \App\Models\Facility::find($user->facility_id)->name }}';
         const db = getDatabase();
         const transferRef = ref(db, 'Transfer');
 
@@ -289,7 +291,7 @@ import { getDatabase, ref, set, onValue, onChildAdded, remove } from 'https://ww
                     if(data.status == 'pregnant') {
                         
                     } else {
-                        transferRef.push({
+                        var transferData = {
                             date: data.date,
                             item: data.track_id,
                             new_facility: data.referred_facility,
@@ -298,11 +300,16 @@ import { getDatabase, ref, set, onValue, onChildAdded, remove } from 'https://ww
                             patient_name: data.patient_name,
                             code: data.code,
                             activity_id: data.activity_id
-                        });
+                        }
+                        
+                        set(ref(db, 'Transfer/' + data.track_id), transferData)
 
-                        transferRef.on('child_added', function(d) {
-                            transferRef.child(d.key).remove();
-                        });
+                        onChildAdded(transferRef, (snapshot) => {
+                            setTimeout(function() {
+                                remove(ref(db, 'Transfer/' + snapshot.key))
+                                window.location.reload(false);
+                            }, 500);
+                        })
 
                         var connRef = ref(db, 'Referral');
                         var refer_data = {
@@ -320,37 +327,15 @@ import { getDatabase, ref, set, onValue, onChildAdded, remove } from 'https://ww
                             activity_id: data.activity_id,
                             referred_facility: data.referred_facility
                         };
-                        connRef.child(referred_to).push(refer_data);
 
-                        connRef.on('child_added', function(data) {
+                        set(ref(db, 'Referral/' + data.track_id), refer_data)
+
+                        onChildAdded(connRef, (snapshot) => {
                             setTimeout(function() {
-                                connRef.child(data.key).remove();
+                                remove(ref(db, 'Referral/' + snapshot.key))
                                 window.location.reload(false);
                             }, 500);
-                        });
-
-                        var data = {
-                            "to": "/topics/ReferralSystem" + referred_to,
-                            "data": {
-                                "subject": "New Referral",
-                                "date": data.date,
-                                "body": data.patient_name + " was referred to your facility from " + myfacility_name + "!"
-                            }
-                        };
-                        
-                        $.ajax({
-                            url: 'https://fcm.googleapis.com/fcm/send',
-                            type: 'post',
-                            data: JSON.stringify(data),
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'key=AAAAJjRh3xQ:APA91bFJ3YMPNZZkuGMZq8MU8IKCMwF2PpuwmQHnUi84y9bKiozphvLFiWXa5I8T-lP4aHVup0Ch83PIxx8XwdkUZnyY-LutEUGvzk2mu_YWPar8PmPXYlftZnsJCazvpma3y5BI7QHP'
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                console.info(data);
-                            }
-                        });
+                        })
                     }
                 },
                 error: function(){
